@@ -8,13 +8,15 @@ Export estático: roda na Vercel ou em qualquer hospedagem de arquivos (Hostinge
 | Rota | O que é |
 | --- | --- |
 | `/` | Página interna de revisão com as direções criativas |
-| `/v1/` | Showroom Editorial: claro, creme + azul-marinho + cobre |
+| `/v1/` | Showroom Editorial, agora no tema noturno da v2 e multipágina (home + `/v1/produtos/`, `/v1/tecnologia/`, `/v1/duvidas/`) |
 | `/v2/` | Noite Profunda: escuro, imersivo, azul |
 | `/v3/` | Tipografia Bold: areia + preto + azul elétrico |
 | `/campanha/` | Landing de campanha (10.10) com contagem regressiva |
 
 Depois que o cliente aprovar uma versão, mover o conteúdo dela para `src/app/page.tsx`,
 apagar as outras e remover o bloqueio de `/v1..v3` em `src/app/robots.ts`.
+Na v1, as rotas ficam em `src/versions/v1/ui.tsx` (`BASE`): trocar para `""` ao promover para a raiz,
+mover `src/app/v1/*` para `src/app/*` e incluir as páginas novas no `sitemap.ts`.
 
 ## Desenvolvimento
 

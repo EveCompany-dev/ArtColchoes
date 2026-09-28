@@ -6,6 +6,7 @@ import { useScrollAnim } from "@/components/Smooth";
 import IsoMattress from "@/components/IsoMattress";
 import { cureLayers as layers } from "@/lib/products";
 import { whatsappLink } from "@/lib/site";
+import { BLUE } from "./ui";
 
 const GAP = 34;
 const n = layers.length;
@@ -58,55 +59,55 @@ export default function TechLayers() {
   }, root);
 
   return (
-    <section id="tecnologia" ref={root} className="relative h-[100svh] overflow-hidden bg-gradient-to-br from-cream via-[#efece6] to-[#dcd8d1] text-navy">
+    <section id="camadas" ref={root} className="relative h-[100svh] overflow-hidden bg-gradient-to-br from-night via-night-2 to-night-3 text-white">
       <div className="mx-auto grid h-full max-w-7xl grid-rows-[auto_1fr_auto] gap-2 px-5 pt-20 pb-6 sm:px-8 lg:grid-cols-[1.25fr_1fr] lg:grid-rows-1 lg:items-center lg:gap-10 lg:pt-24">
         <div className="lg:hidden">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-copper uppercase">Tecnologia Pikolin</p>
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-glow uppercase">Tecnologia Pikolin</p>
           <h2 className="font-display mt-1 text-xl">Por dentro de um colchão</h2>
         </div>
 
-        <div className="relative min-h-0">
-          <IsoMattress layers={layers} explodeRoom={GAP * (n - 1)} badges className="absolute inset-0 size-full" title="Colchão Pikolin Cure em camadas" />
+        <div className="relative min-h-0 lg:h-[74svh]">
+          <IsoMattress layers={layers} explodeRoom={GAP * (n - 1)} badges badgeColor={BLUE} className="absolute inset-0 size-full drop-shadow-[0_40px_60px_rgba(47,107,255,0.22)]" title="Colchão Pikolin Cure em camadas" />
         </div>
 
         <div className="relative">
           <div className="hidden lg:block">
-            <p className="text-xs font-semibold tracking-[0.3em] text-copper uppercase">Tecnologia Pikolin · Copper System</p>
+            <p className="text-xs font-semibold tracking-[0.3em] text-glow uppercase">Tecnologia Pikolin · Copper System</p>
             <h2 className="font-display mt-3 text-4xl leading-tight">Por dentro de um colchão de verdade</h2>
           </div>
 
-          <div className="relative mt-4 min-h-[230px] rounded-3xl border-2 border-copper/70 bg-white/70 p-6 backdrop-blur sm:min-h-[220px] lg:mt-8 lg:p-8">
+          <div className="relative mt-4 min-h-[230px] rounded-3xl border border-sky/50 bg-white/5 p-6 backdrop-blur sm:min-h-[220px] lg:mt-8 lg:p-8">
             <div className="tx-card absolute inset-6 lg:inset-8">
-              <p className="text-xs tracking-widest text-navy/50 uppercase">Pikolin Cure · 33 cm</p>
+              <p className="text-xs tracking-widest text-white/45 uppercase">Pikolin Cure · 33 cm</p>
               <p className="font-display mt-2 text-xl sm:text-2xl">10 camadas, cada uma com uma função.</p>
-              <p className="mt-3 text-sm leading-relaxed text-navy/65">Role para desmontar o colchão e ver a tecnologia que faz a diferença no seu sono.</p>
+              <p className="mt-3 text-sm leading-relaxed text-white/60">Role para desmontar o colchão e ver a tecnologia que faz a diferença no seu sono.</p>
             </div>
             {layers.map((l, i) => (
               <div key={l.name} className="tx-card absolute inset-6 lg:inset-8">
-                <p className="text-xs tracking-widest text-navy/50 uppercase">
+                <p className="text-xs tracking-widest text-white/45 uppercase">
                   Camada {String(i + 1).padStart(2, "0")} / {n}
                 </p>
                 <p className="font-display mt-2 text-xl sm:text-2xl">{l.name}</p>
-                <p className="mt-3 text-sm leading-relaxed text-navy/70">{l.text}</p>
+                <p className="mt-3 text-sm leading-relaxed text-white/65">{l.text}</p>
               </div>
             ))}
             <div className="tx-card absolute inset-6 lg:inset-8">
-              <p className="text-xs tracking-widest text-navy/50 uppercase">Venha sentir a diferença</p>
+              <p className="text-xs tracking-widest text-white/45 uppercase">Venha sentir a diferença</p>
               <p className="font-display mt-2 text-xl sm:text-2xl">Teste o Cure no showroom.</p>
-              <a href={whatsappLink("Olá! Quero agendar uma visita para testar o Pikolin Cure.")} target="_blank" rel="noopener" className="mt-5 inline-flex rounded-full bg-navy px-5 py-3 text-sm font-semibold text-white hover:bg-copper">
+              <a href={whatsappLink("Olá! Quero agendar uma visita para testar o Pikolin Cure.")} target="_blank" rel="noopener" className="mt-5 inline-flex rounded-full bg-sky px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-night">
                 Agendar visita
               </a>
             </div>
           </div>
 
-          <div className="mt-4 h-1 overflow-hidden rounded-full bg-navy/10">
-            <div className="tx-bar h-full origin-left bg-copper" style={{ transform: "scaleX(0)" }} />
+          <div className="mt-4 h-1 overflow-hidden rounded-full bg-white/10">
+            <div className="tx-bar h-full origin-left bg-sky" style={{ transform: "scaleX(0)" }} />
           </div>
 
           <ol className="mt-6 hidden grid-cols-2 gap-x-6 gap-y-1.5 text-sm lg:grid">
             {layers.map((l, i) => (
               <li key={l.name} className="tx-item flex items-center gap-2.5">
-                <span className="grid size-5 shrink-0 place-items-center rounded-full bg-navy text-[10px] font-bold text-white">{i + 1}</span>
+                <span className="grid size-5 shrink-0 place-items-center rounded-full bg-sky text-[10px] font-bold text-white">{i + 1}</span>
                 {l.short}
               </li>
             ))}

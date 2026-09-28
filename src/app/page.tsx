@@ -5,9 +5,9 @@ import Link from "next/link";
 const versions = [
   {
     href: "/v1/",
-    name: "V1 · Showroom Editorial",
-    text: "Claro, elegante, tom creme e azul-marinho da fachada. Hero com a foto se expandindo, explicador de camadas fixado (estilo Pikolin), categorias em scroll horizontal e filtro de produtos com Flip.",
-    colors: ["#f5f2ec", "#0b1630", "#c4703a"],
+    name: "V1 · Showroom Editorial (noite)",
+    text: "Estrutura editorial da v1 com as cores da v2 e site multipágina: home com showroom, sobre e contato; Produtos, Tecnologia e Dúvidas em páginas próprias. Hero com colunas de fotos do showroom em movimento.",
+    colors: ["#070d1f", "#2f6bff", "#9db8ff"],
   },
   {
     href: "/v2/",

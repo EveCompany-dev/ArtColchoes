@@ -32,9 +32,10 @@ type Props = {
   badges?: boolean;
   className?: string;
   title?: string;
+  badgeColor?: string;
 };
 
-export default function IsoMattress({ layers, explodeRoom = 0, badges = false, className, title }: Props) {
+export default function IsoMattress({ layers, explodeRoom = 0, badges = false, className, title, badgeColor = "#0b1630" }: Props) {
   const uid = useId().replace(/:/g, "");
   const total = layers.reduce((s, l) => s + l.t, 0);
   const minX = -D * C - 40;
@@ -91,8 +92,8 @@ export default function IsoMattress({ layers, explodeRoom = 0, badges = false, c
 
             {badges && (
               <g className="iso-badge" transform={`translate(${bx - 26} ${by})`}>
-                <line x1="12" y1="0" x2="26" y2="0" stroke="#0b1630" strokeOpacity="0.35" />
-                <circle r="11" fill="#0b1630" />
+                <line x1="12" y1="0" x2="26" y2="0" stroke={badgeColor} strokeOpacity="0.5" />
+                <circle r="11" fill={badgeColor} />
                 <text textAnchor="middle" dy="4" fontSize="11" fontWeight="700" fill="#fff">
                   {i + 1}
                 </text>

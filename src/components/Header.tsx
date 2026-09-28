@@ -1,11 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { site, whatsappLink } from "@/lib/site";
 import Icon, { WhatsAppGlyph } from "./Icon";
 
-export const nav = [
+export type NavItem = { href: string; label: string };
+
+export const nav: NavItem[] = [
   { href: "#showroom", label: "Showroom" },
   { href: "#tecnologia", label: "Tecnologia" },
   { href: "#produtos", label: "Produtos" },
@@ -19,13 +22,24 @@ type Props = {
   /** fundo depois de rolar */
   barTone?: "light" | "dark";
   accent?: string;
+  items?: NavItem[];
+  homeHref?: string;
 };
+
+function isActive(href: string, pathname: string) {
+  if (href.includes("#")) return false;
+  const norm = (v: string) => (v.endsWith("/") ? v : `${v}/`);
+  return norm(href) === norm(pathname);
+}
 
 export default function Header({
   heroTone = "dark",
   barTone = "light",
   accent = "#0b1630",
+  items = nav,
+  homeHref = "#",
 }: Props) {
+  const pathname = usePathname() ?? "";
   const root = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
@@ -114,7 +128,7 @@ export default function Header({
           className={`mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-8 ${text}`}
         >
           <a
-            href="#"
+            href={homeHref}
             className="hd-item relative z-10"
             aria-label="Art Colchões - início"
           >
@@ -134,16 +148,20 @@ export default function Header({
             className="hidden items-center gap-8 lg:flex"
             aria-label="Principal"
           >
-            {nav.map((n) => (
+            {items.map((n) => {
+              const active = isActive(n.href, pathname);
+              return (
               <a
                 key={n.href}
                 href={n.href}
+                aria-current={active ? "page" : undefined}
                 className="hd-item group relative text-sm font-medium"
               >
                 {n.label}
-                <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-300 group-hover:origin-left group-hover:scale-x-100" />
+                <span className={`absolute -bottom-1 left-0 h-px w-full bg-current transition-transform duration-300 ${active ? "scale-x-100" : "origin-right scale-x-0 group-hover:origin-left group-hover:scale-x-100"}`} />
               </a>
-            ))}
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-3">
@@ -182,12 +200,13 @@ export default function Header({
         className={`mm-panel fixed inset-0 z-30 bg-navy px-6 pt-28 pb-10 text-white lg:hidden ${open ? "" : "pointer-events-none invisible"}`}
       >
         <nav className="flex flex-col gap-2" aria-label="Menu mobile">
-          {nav.map((n) => (
+          {items.map((n) => (
             <a
               key={n.href}
               href={n.href}
               onClick={() => setOpen(false)}
-              className="mm-link font-display border-b border-white/10 py-4 text-2xl"
+              aria-current={isActive(n.href, pathname) ? "page" : undefined}
+              className="mm-link font-display border-b border-white/10 py-4 text-2xl aria-[current=page]:text-glow"
             >
               {n.label}
             </a>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <JsonLd />
+      <JsonLd withFaq={false} />
       <V1 />
     </>
   );

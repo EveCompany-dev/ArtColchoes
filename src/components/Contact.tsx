@@ -65,19 +65,29 @@ export function CityList({ theme = "light" }: { theme?: "light" | "dark" }) {
   );
 }
 
-export function Footer({ theme = "dark" }: { theme?: "light" | "dark" }) {
+export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; links?: { href: string; label: string }[] }) {
   const dark = theme === "dark";
   const muted = dark ? "text-white/50" : "text-black/50";
   return (
     <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"} px-5 pt-16 pb-24 sm:px-8`}>
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
-        <div className="md:col-span-2">
+      <div className={`mx-auto grid max-w-7xl gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-5" : "md:grid-cols-4"}`}>
+        <div className={links ? "sm:col-span-2" : "md:col-span-2"}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={dark ? "/img/logo-light.png" : "/img/logo-dark.png"} alt="Art Colchões" className="h-12 w-auto" loading="lazy" />
           <p className={`mt-5 max-w-sm text-sm leading-relaxed ${muted}`}>
             Loja direto de fábrica de colchões, bases, cabeceiras e cama & banho em Brusque/SC. O maior showroom da região.
           </p>
         </div>
+        {links && (
+          <nav className="text-sm" aria-label="Rodapé">
+            <p className="font-semibold">Navegue</p>
+            <ul className={`mt-3 space-y-2 ${muted}`}>
+              {links.map((l) => (
+                <li key={l.href}><a href={l.href} className="hover:underline">{l.label}</a></li>
+              ))}
+            </ul>
+          </nav>
+        )}
         <div className="text-sm">
           <p className="font-semibold">Visite</p>
           <p className={`mt-3 ${muted}`}>{site.address.full}</p>

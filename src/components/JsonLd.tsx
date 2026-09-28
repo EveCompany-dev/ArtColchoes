@@ -1,7 +1,7 @@
 import { cities, faq, site } from "@/lib/site";
 
 // Dados estruturados para o Google (negócio local + FAQ).
-export default function JsonLd() {
+export default function JsonLd({ withFaq = true }: { withFaq?: boolean }) {
   const business = {
     "@context": "https://schema.org",
     "@type": "FurnitureStore",
@@ -33,7 +33,7 @@ export default function JsonLd() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(business) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      {withFaq && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
     </>
   );
 }

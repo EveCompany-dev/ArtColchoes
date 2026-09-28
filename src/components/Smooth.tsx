@@ -40,23 +40,38 @@ export default function Smooth({ children, smooth = 1.2 }: { children: ReactNode
           normalizeScroll: false,
         });
 
-    // Links âncora (#secao) passam pelo smoother para manter a suavidade.
+    const scrollToEl = (el: HTMLElement | null, animate: boolean) => {
+      if (smoother) smoother.scrollTo(el ?? 0, animate, "top top");
+      else (el ?? document.body).scrollIntoView({ behavior: animate ? "smooth" : "auto" });
+    };
+
     const onClick = (e: MouseEvent) => {
-      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
-      if (!a) return;
-      const id = a.getAttribute("href")!.slice(1);
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+      if (!a || a.target === "_blank") return;
+      const url = new URL(a.href, location.href);
+      const samePage = url.origin === location.origin && url.pathname === location.pathname;
+      if (!samePage || !a.getAttribute("href")!.includes("#")) return;
+      const id = decodeURIComponent(url.hash.slice(1));
       const el = id ? document.getElementById(id) : null;
       if (!el && id) return;
       e.preventDefault();
-      if (smoother) smoother.scrollTo(el ?? 0, true, "top top");
-      else (el ?? document.body).scrollIntoView({ behavior: "smooth" });
-      history.replaceState(null, "", `#${id}`);
+      scrollToEl(el, true);
+      history.replaceState(null, "", id ? `#${id}` : location.pathname);
     };
     document.addEventListener("click", onClick);
     setReady(true);
 
     // imagens/fontes carregando mudam as alturas
-    const refresh = () => ScrollTrigger.refresh();
+    let hashDone = !location.hash;
+    const refresh = () => {
+      ScrollTrigger.refresh();
+      if (hashDone) return;
+      const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (el) {
+        hashDone = true;
+        setTimeout(() => scrollToEl(el, false), 60);
+      }
+    };
     window.addEventListener("load", refresh);
     document.fonts?.ready.then(refresh);
 
