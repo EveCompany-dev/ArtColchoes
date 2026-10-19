@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { gsap, SplitText } from "@/lib/gsap";
 import { useScrollAnim } from "@/components/Smooth";
 import Icon, { WhatsAppGlyph } from "@/components/Icon";
+import Img from "@/components/Img";
 import { photos, site, whatsappLink } from "@/lib/site";
 import { routes } from "./ui";
 
@@ -73,8 +74,14 @@ export default function Hero() {
           <div key={i} className={`hero-col flex-1 overflow-hidden ${i === 2 ? "hidden xl:block" : ""} ${i === 1 ? "lg:mt-24" : ""}`}>
             <div className="hero-track flex flex-col gap-3 sm:gap-4">
               {[...col, ...col].map(([src, alt], k) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={k} src={src} alt={alt} loading={k < 2 ? "eager" : "lazy"} className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-white/10" />
+                <Img
+                  key={k}
+                  name={src}
+                  alt={alt}
+                  priority={i === 0 && k === 0}
+                  sizes="(min-width:1280px) 14vw, (min-width:1024px) 22vw, 46vw"
+                  className={`aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-white/10 ${k % col.length === col.length - 1 ? "max-sm:hidden" : ""}`}
+                />
               ))}
             </div>
           </div>
