@@ -10,19 +10,18 @@ import Icon, { WhatsAppGlyph } from "@/components/Icon";
 import { whatsappLink } from "@/lib/site";
 
 export const BLUE = "#2f6bff";
-export const BASE = "/v1";
 
 export const routes = {
-  home: `${BASE}/`,
-  showroom: `${BASE}/#showroom`,
-  produtos: `${BASE}/produtos/`,
-  tecnologia: `${BASE}/tecnologia/`,
-  sobre: `${BASE}/#sobre`,
-  duvidas: `${BASE}/duvidas/`,
-  contato: `${BASE}/#contato`,
+  home: "/",
+  showroom: "/#showroom",
+  produtos: "/produtos/",
+  tecnologia: "/tecnologia/",
+  sobre: "/#sobre",
+  duvidas: "/duvidas/",
+  contato: "/#contato",
 };
 
-export const v1Nav: NavItem[] = [
+export const nav: NavItem[] = [
   { href: routes.showroom, label: "Showroom" },
   { href: routes.produtos, label: "Produtos" },
   { href: routes.tecnologia, label: "Tecnologia" },
@@ -34,10 +33,10 @@ export const v1Nav: NavItem[] = [
 export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="bg-night text-white">
-      <Header heroTone="light" barTone="dark" accent={BLUE} items={v1Nav} homeHref={routes.home} />
+      <Header heroTone="light" barTone="dark" accent={BLUE} items={nav} homeHref={routes.home} />
       <Smooth>
         <main>{children}</main>
-        <Footer theme="dark" links={[{ href: routes.home, label: "Início" }, ...v1Nav]} />
+        <Footer theme="dark" links={[{ href: routes.home, label: "Início" }, ...nav]} />
       </Smooth>
       <WhatsAppFloat />
     </div>

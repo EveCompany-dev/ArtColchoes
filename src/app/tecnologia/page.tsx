@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TecnologiaPage } from "@/versions/v1/Pages";
+import { TecnologiaPage } from "@/views/Pages";
 
 export const metadata: Metadata = {
   title: "Tecnologia dos colchões Pikolin",

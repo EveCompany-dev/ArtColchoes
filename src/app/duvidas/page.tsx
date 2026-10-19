@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { faq } from "@/lib/site";
-import { DuvidasPage } from "@/versions/v1/Pages";
+import { DuvidasPage } from "@/views/Pages";
 
 export const metadata: Metadata = {
   title: "Dúvidas frequentes",

@@ -3,7 +3,6 @@
 @theme {
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-michroma), var(--font-manrope), sans-serif;
-  --font-grotesk: var(--font-grotesk), var(--font-manrope), sans-serif;
 
   --color-navy: #0b1630;
   --color-navy-2: #13244b;

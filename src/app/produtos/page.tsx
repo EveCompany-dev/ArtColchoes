@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ProdutosPage } from "@/versions/v1/Pages";
+import { ProdutosPage } from "@/views/Pages";
 
 export const metadata: Metadata = {
   title: "Produtos: colchões, bases, cabeceiras e cama & banho",
