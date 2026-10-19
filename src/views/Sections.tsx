@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef } from "react";
 import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
@@ -6,6 +6,7 @@ import { useScrollAnim } from "@/components/Smooth";
 import Icon, { WhatsAppGlyph } from "@/components/Icon";
 import ShowroomVideo from "@/components/ShowroomVideo";
 import ProductGrid from "@/components/ProductGrid";
+import Img from "@/components/Img";
 import FirmnessGuide from "@/components/FirmnessGuide";
 import Faq from "@/components/Faq";
 import InstagramGrid from "@/components/InstagramGrid";
@@ -135,8 +136,7 @@ export function Ambientes() {
             [photos.espacoHerval, "Espaço Herval"],
           ].map(([src, alt], i) => (
             <figure key={src} className="amb-img relative overflow-hidden rounded-3xl" data-speed={i % 2 ? "1.05" : "0.98"}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={alt} loading="lazy" className="aspect-[4/3] w-full object-cover sm:aspect-[3/4]" />
+              <Img name={src} alt={alt} sizes="(min-width:1024px) 25vw, 50vw" className="aspect-[4/3] w-full object-cover sm:aspect-[3/4]" />
               <figcaption className="absolute inset-x-3 bottom-3 rounded-xl bg-black/45 px-3 py-2 text-xs backdrop-blur">{alt}</figcaption>
             </figure>
           ))}
@@ -168,8 +168,7 @@ export function Explore() {
         <div className="mt-10 grid gap-5 sm:mt-14 lg:grid-cols-[1fr_1fr_0.8fr]">
           {cards.map((c) => (
             <a key={c.href} href={c.href} className="ex-card group relative flex min-h-[200px] flex-col justify-end overflow-hidden rounded-[2rem] p-6 sm:p-8 ring-1 ring-white/10 sm:min-h-[520px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={c.img} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105" />
+              <Img name={c.img} alt="" sizes="(min-width:1024px) 33vw, 100vw" className="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105" />
               <span className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/5" />
               <span className="relative">
                 <span className="text-xs font-semibold tracking-[0.3em] text-glow uppercase">{c.kicker}</span>
@@ -222,8 +221,7 @@ export function About() {
     <section id="sobre" ref={root} className="bg-night-2 px-5 py-12 sm:px-8 sm:py-36">
       <div className="mx-auto grid max-w-7xl gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-20">
         <div className="about-photo-wrap relative aspect-[4/3] overflow-hidden rounded-3xl ring-1 ring-white/10 sm:aspect-[3/4]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={photos.showroom} alt="Colchões expostos no showroom da Art Colchões" loading="lazy" className="about-photo size-full object-cover" />
+          <Img name={photos.showroom} alt="Colchões expostos no showroom da Art Colchões" sizes="(min-width:1024px) 50vw, 100vw" className="about-photo size-full object-cover" />
         </div>
         <div className="flex flex-col justify-center">
           <Kicker>Sobre nós</Kicker>
@@ -269,7 +267,8 @@ export function ContactSection() {
           </div>
           <CityList theme="dark" />
         </div>
-        <div className="mt-10 sm:mt-14">`n          <ContactInfo theme="dark" />
+        <div className="mt-10 sm:mt-14">
+          <ContactInfo theme="dark" />
         </div>
         <div className="mt-8 sm:mt-20">
           <InstagramGrid theme="dark" />
@@ -320,8 +319,7 @@ export function Categories() {
         {categories.map((c, i) => (
           <article key={c.slug} className="cat-panel relative flex min-h-[250px] flex-col justify-between overflow-hidden rounded-2xl border border-white/5 bg-night p-4 sm:min-h-[300px] sm:p-6 lg:min-h-[340px] lg:motion-safe:min-h-0 lg:motion-safe:w-[34vw] lg:motion-safe:shrink-0 lg:motion-safe:rounded-none lg:motion-safe:border-0 lg:motion-safe:border-l lg:motion-safe:p-12">
             <div className="absolute inset-0 overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={categoryPhotos[c.slug]} alt={`${c.name} no showroom da Art Colchões`} loading="lazy" className="cat-art size-full object-cover" />
+              <Img name={categoryPhotos[c.slug]} alt={`${c.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 40vw, 50vw" className="cat-art size-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/10" />
             </div>
             <span className="cat-num font-display relative text-4xl leading-none text-glow opacity-60 lg:motion-safe:text-[12vw] lg:motion-safe:opacity-40">{String(i + 1).padStart(2, "0")}</span>
@@ -407,7 +405,8 @@ export function Guide() {
           <Kicker>Guia de conforto</Kicker>
           <h2 className="reveal-title font-display mx-auto mt-5 max-w-3xl text-3xl leading-tight sm:text-5xl">Qual colchão combina com o seu biotipo?</h2>
         </div>
-        <div className="guide-box mt-10 sm:mt-14">`n          <FirmnessGuide theme="dark" accent={BLUE} />
+        <div className="guide-box mt-10 sm:mt-14">
+          <FirmnessGuide theme="dark" accent={BLUE} />
         </div>
       </div>
     </section>

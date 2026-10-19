@@ -118,7 +118,7 @@ export default function TechLayers() {
           <ol className="mt-6 hidden grid-cols-2 gap-x-6 gap-y-1.5 text-sm lg:grid">
             {layers.map((l, i) => (
               <li key={l.name} className="tx-item flex items-center gap-2.5">
-                <span className="grid size-5 shrink-0 place-items-center rounded-full bg-sky text-[10px] font-bold text-white">{i + 1}</span>
+                <span className="grid size-5 shrink-0 place-items-center rounded-full bg-sky text-xs font-bold text-white">{i + 1}</span>
                 {l.short}
               </li>
             ))}

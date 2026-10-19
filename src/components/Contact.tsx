@@ -51,7 +51,7 @@ export function ContactInfo({ theme = "light" }: { theme?: "light" | "dark" }) {
           </div>
         </div>
       </div>
-      <div className={`ct-card relative min-h-[360px] overflow-hidden rounded-2xl ${card}`}>
+      <div className={`ct-card relative min-h-[280px] overflow-hidden rounded-2xl sm:min-h-[360px] ${card}`}>
         {mapOn ? (
           <iframe
             title="Mapa da Art Colchões em Brusque/SC"
@@ -98,8 +98,8 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
   const dark = theme === "dark";
   const muted = dark ? "text-white/70" : "text-black/65";
   return (
-    <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"} px-5 pt-16 pb-24 sm:px-8`}>
-      <div className={`mx-auto grid max-w-7xl gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-5" : "md:grid-cols-4"}`}>
+    <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"}     px-5 pt-12 pb-24 sm:px-8 sm:pt-16`}>
+          <div className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-5" : "md:grid-cols-4"}`}>
         <div className={links ? "sm:col-span-2" : "md:col-span-2"}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={dark ? "/img/logo-light.png" : "/img/logo-dark.png"} alt="Art Colchões" className="h-12 w-auto" loading="lazy" />
@@ -125,10 +125,10 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
         <div className="text-sm">
           <p className="font-semibold">Fale com a gente</p>
           <ul className={`mt-2 ${muted}`}>
-            <li><a href={whatsappLink()} target="_blank" rel="noopener" className="touch-link hover:underline">WhatsApp: {site.phone}</a></li>
+            <li><a href={whatsappLink()} target="_blank" rel="noopener" className="touch-link break-words hover:underline">WhatsApp: {site.phone}</a></li>
             <li><a href={telHref} className="touch-link gap-2 hover:underline"><Icon name="phone" className="size-4" /> Ligar</a></li>
-            <li><a href={`mailto:${site.email}`} className="touch-link hover:underline">{site.email}</a></li>
-            <li><a href={site.instagram.url} target="_blank" rel="noopener" className="touch-link hover:underline">{site.instagram.handle}</a></li>
+            <li><a href={`mailto:${site.email}`} className="touch-link break-all hover:underline">{site.email}</a></li>
+            <li><a href={site.instagram.url} target="_blank" rel="noopener" className="touch-link break-all hover:underline">{site.instagram.handle}</a></li>
           </ul>
         </div>
       </div>

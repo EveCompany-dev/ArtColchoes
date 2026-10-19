@@ -79,7 +79,8 @@ export function PageIntro({ kicker, title, text, crumb }: { kicker: string; titl
           <span className="mx-2">/</span>
           <span className="text-white/80">{crumb}</span>
         </nav>
-        <div className="pi-in mt-6 sm:mt-10">`n          <Kicker>{kicker}</Kicker>
+        <div className="pi-in mt-6 sm:mt-10">
+          <Kicker>{kicker}</Kicker>
         </div>
         <h1 className="pi-title font-display mt-5 max-w-4xl text-4xl leading-[1.08] sm:text-6xl lg:text-7xl">{title}</h1>
         <p className="pi-in mt-8 max-w-2xl text-lg leading-relaxed text-white/60">{text}</p>

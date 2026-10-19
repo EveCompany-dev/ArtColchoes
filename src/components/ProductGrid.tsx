@@ -6,6 +6,7 @@ import { firmnessLabel, firmnessScale, products, type Product } from "@/lib/prod
 import { whatsappLink } from "@/lib/site";
 import IsoMattress, { productLayers } from "./IsoMattress";
 import { WhatsAppGlyph } from "./Icon";
+import Img from "./Img";
 
 type Theme = "light" | "dark";
 
@@ -18,8 +19,7 @@ export function ProductCard({ p, theme = "light", accent }: { p: Product; theme?
     <article className={`group flex h-full flex-col overflow-hidden rounded-3xl transition-shadow duration-500 ${dark ? "bg-white/[0.04] ring-1 ring-white/10 hover:bg-white/[0.07]" : "bg-white ring-1 ring-black/5 hover:shadow-2xl hover:shadow-black/10"}`}>
       <div className="relative aspect-[4/3] overflow-hidden" style={{ background: dark ? "linear-gradient(160deg,#1a2749,#0b1328)" : `linear-gradient(160deg, #f7f5f1, ${p.tone.top})` }}>
         {p.photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={p.photo} alt={`Colchão ${p.brand} ${p.name} no showroom da Art Colchões`} loading="lazy" className="size-full object-cover transition duration-700 motion-reduce:transition-none group-hover:scale-105 motion-reduce:group-hover:scale-100" />
+          <Img name={p.photo} alt={`Colchão ${p.brand} ${p.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="size-full object-cover transition duration-700 motion-reduce:transition-none group-hover:scale-105 motion-reduce:group-hover:scale-100" />
         ) : (
           <IsoMattress layers={productLayers(p.tone.top, p.tone.side)} className="absolute inset-0 m-auto h-[82%] w-[82%] transition duration-700 motion-reduce:transition-none group-hover:-translate-y-2 motion-reduce:group-hover:translate-y-0" title={`Ilustração do colchão ${p.name}`} />
         )}

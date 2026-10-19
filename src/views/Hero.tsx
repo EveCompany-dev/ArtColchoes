@@ -38,7 +38,7 @@ export default function Hero() {
       .timeline({ defaults: { ease: "expo.out" } })
       .from(".hero-glow", { scale: 0.4, opacity: 0, duration: 2.2 }, 0)
       .from(split.chars, { yPercent: 110, duration: 1.3, stagger: 0.025 }, 0.1)
-      .from(".hero-col", { yPercent: 12, opacity: 0, stagger: 0.12, duration: 1.8 }, 0.2)
+      .from(".hero-col", { yPercent: 12, stagger: 0.12, duration: 1.8 }, 0.2)
       .from(".hero-meta > *", { y: 20, opacity: 0, stagger: 0.08, duration: 0.9 }, 0.7);
 
     const mm = gsap.matchMedia();
@@ -62,7 +62,7 @@ export default function Hero() {
   }, root);
 
   return (
-    <section ref={root} className="relative flex min-h-[100svh] items-center overflow-hidden bg-night pt-24 pb-16">
+    <section ref={root} className="relative flex min-h-[85svh] items-center overflow-hidden bg-night pt-24 pb-12 sm:min-h-[100svh] sm:pb-16">
       <div aria-hidden="true" className="hero-glow pointer-events-none absolute top-1/2 left-[70%] size-[75vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(47,107,255,0.32),rgba(47,107,255,0.07)_42%,transparent_66%)]" />
 
       <div

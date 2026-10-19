@@ -1,5 +1,6 @@
 import { photos, site } from "@/lib/site";
 import Icon from "./Icon";
+import Img from "./Img";
 
 // PLACEHOLDER: o briefing pede Instagram integrado. Quando houver token da
 // Instagram Graph API (ou widget tipo Behold/Elfsight), trocar `posts` pelo feed real.
@@ -21,8 +22,7 @@ export default function InstagramGrid({ theme = "light" }: { theme?: "light" | "
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-3">
         {posts.map((src, i) => (
           <a key={i} href={site.instagram.url} target="_blank" rel="noopener" className="ig-post group relative block aspect-square overflow-hidden rounded-xl">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt="" loading="lazy" decoding="async" className="size-full object-cover transition duration-700 group-hover:scale-110" />
+            <Img name={src} alt="" sizes="(min-width:640px) 16vw, 33vw" className="size-full object-cover transition duration-700 group-hover:scale-110" />
             <span className="absolute inset-0 grid place-items-center bg-black/40 text-white opacity-0 transition group-hover:opacity-100">
               <Icon name="instagram" className="size-7" />
             </span>
