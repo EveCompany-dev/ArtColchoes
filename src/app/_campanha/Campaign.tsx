@@ -69,7 +69,7 @@ function Countdown({ now, phase }: { now: number | null; phase: Phase }) {
             <span key={v} className="font-display block animate-[fadeUp_.35s_ease-out] text-3xl tabular-nums sm:text-4xl">
               {v === undefined ? "--" : String(v).padStart(2, "0")}
             </span>
-            <span className="mt-1 block text-[11px] tracking-widest text-white/50 uppercase">{label}</span>
+            <span className="mt-1 block text-xs tracking-widest text-white/65 uppercase">{label}</span>
           </div>
         ))}
       </div>
@@ -166,7 +166,7 @@ export default function Campaign() {
               </div>
             ))}
           </div>
-          <p className="mt-10 flex items-center gap-2 text-sm text-black/55">
+          <p className="mt-10 flex items-center gap-2 text-sm text-black/65">
             <Icon name="pin" className="size-4" /> {site.address.full} · Seg a sex 9h às 18h · Sáb 9h às 13h
           </p>
         </div>

@@ -3,7 +3,7 @@ import { campaign } from "@/lib/campaign";
 import Campaign from "./Campaign";
 
 export const metadata: Metadata = {
-  title: `${campaign.title} | Ofertas em colchões em Brusque`,
+  title: { absolute: `${campaign.title} | Ofertas em colchões em   Brusque` },
   description: `${campaign.subtitle} Colchões Pikolin, Herval, Mannes e D'angelis com entrega e montagem grátis.`,
 };
 
