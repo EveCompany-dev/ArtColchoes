@@ -11,30 +11,49 @@ import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { Footer } from "@/components/Contact";
 import Icon, { WhatsAppGlyph } from "@/components/Icon";
 
-function remaining(target: number) {
-  const ms = Math.max(0, target - Date.now());
+const startsAt = new Date(campaign.startsAt).getTime();
+const endsAt = new Date(campaign.endsAt).getTime();
+
+type Phase = "antes" | "durante" | "depois";
+
+// Relógio só no cliente (export estático): null até hidratar.
+function useNow() {
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    const tick = () => setNow(Date.now());
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
+
+function phaseAt(now: number | null): Phase {
+  if (now === null || now < startsAt) return "antes";
+  return now < endsAt ? "durante" : "depois";
+}
+
+function remaining(target: number, now: number) {
+  const ms = Math.max(0, target - now);
   return {
     dias: Math.floor(ms / 864e5),
     horas: Math.floor((ms / 36e5) % 24),
     min: Math.floor((ms / 6e4) % 60),
     seg: Math.floor((ms / 1e3) % 60),
-    done: ms === 0,
   };
 }
 
-function Countdown() {
-  const target = new Date(campaign.startsAt).getTime();
-  const [t, setT] = useState<ReturnType<typeof remaining> | null>(null);
-  useEffect(() => {
-    const tick = () => setT(remaining(target));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [target]);
-
-  if (t?.done) {
-    return <p className="font-display text-2xl text-[#e0894f]">A campanha começou. Corre pro showroom!</p>;
+function Countdown({ now, phase }: { now: number | null; phase: Phase }) {
+  if (phase === "depois") {
+    return (
+      <div>
+        <p className="font-display text-2xl text-[#e0894f]">A campanha {campaign.name} terminou.</p>
+        <p className="mt-2 text-white/65">As condições direto de fábrica continuam no showroom.</p>
+      </div>
+    );
   }
+  // durante a campanha, conta até o fim
+  const t = now === null ? null : remaining(phase === "durante" ? endsAt : startsAt, now);
   const cells: [string, number | undefined][] = [
     ["dias", t?.dias],
     ["horas", t?.horas],
@@ -42,18 +61,40 @@ function Countdown() {
     ["seg", t?.seg],
   ];
   return (
-    <div className="flex gap-3 sm:gap-4" role="timer" aria-live="off">
-      {cells.map(([label, v]) => (
-        <div key={label} className="cd-cell w-20 rounded-2xl bg-white/5 py-4 text-center ring-1 ring-white/10 sm:w-24">
-          <span key={v} className="font-display block animate-[fadeUp_.35s_ease-out] text-3xl tabular-nums sm:text-4xl">
-            {v === undefined ? "--" : String(v).padStart(2, "0")}
-          </span>
-          <span className="mt-1 block text-[11px] tracking-widest text-white/50 uppercase">{label}</span>
-        </div>
-      ))}
+    <div>
+      {phase === "durante" && <p className="font-display mb-4 text-2xl text-[#e0894f]">A campanha começou. Corre pro showroom!</p>}
+      <div className="flex gap-3 sm:gap-4" role="timer" aria-live="off">
+        {cells.map(([label, v]) => (
+          <div key={label} className="cd-cell w-20 rounded-2xl bg-white/5 py-4 text-center ring-1 ring-white/10 sm:w-24">
+            <span key={v} className="font-display block animate-[fadeUp_.35s_ease-out] text-3xl tabular-nums sm:text-4xl">
+              {v === undefined ? "--" : String(v).padStart(2, "0")}
+            </span>
+            <span className="mt-1 block text-[11px] tracking-widest text-white/50 uppercase">{label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
+
+// Texto dos CTAs muda conforme a fase da campanha
+const cta: Record<Phase, { header: string; main: string; msg: string }> = {
+  antes: {
+    header: "Quero ser avisado",
+    main: "Receber as ofertas no WhatsApp",
+    msg: `Olá! Quero ser avisado(a) das condições da ${campaign.title}.`,
+  },
+  durante: {
+    header: "Quero as ofertas",
+    main: "Ver as ofertas no WhatsApp",
+    msg: `Olá! Quero saber as condições da ${campaign.title}.`,
+  },
+  depois: {
+    header: "Falar com consultor",
+    main: "Consultar condições no WhatsApp",
+    msg: "Olá! Vim pela página da campanha e gostaria de saber as condições atuais.",
+  },
+};
 
 export default function Campaign() {
   const root = useRef<HTMLDivElement>(null);
@@ -74,7 +115,9 @@ export default function Campaign() {
     { scope: root },
   );
 
-  const msg = `Olá! Quero ser avisado(a) das condições da ${campaign.title}.`;
+  const now = useNow();
+  const phase = phaseAt(now);
+  const { header, main, msg } = cta[phase];
 
   return (
     <div ref={root} className="min-h-dvh bg-[#0b1630] text-white">
@@ -84,7 +127,7 @@ export default function Campaign() {
           <img src="/img/logo-light.png" alt="Art Colchões" className="h-10 w-auto" />
         </Link>
         <a href={whatsappLink(msg)} target="_blank" rel="noopener" className="rounded-full bg-[#c4703a] px-5 py-2.5 text-sm font-semibold">
-          Quero ser avisado
+          {header}
         </a>
       </header>
 
@@ -94,12 +137,12 @@ export default function Campaign() {
         <div className="relative mx-auto max-w-7xl">
           <p className="cp-in text-xs font-semibold tracking-[0.3em] text-[#e0894f] uppercase">Campanha · {new Date(campaign.startsAt).toLocaleDateString("pt-BR")}</p>
           <h1 className="mt-4">
-            <span className="cp-big font-display block text-[28vw] leading-[0.9] sm:text-[20vw]">{campaign.name}</span>
+            <span className="cp-big font-display block text-[21vw] leading-[0.9] whitespace-nowrap sm:text-[20vw]">{campaign.name}</span>
             <span className="cp-in font-display mt-4 block text-2xl sm:text-4xl">{campaign.title}</span>
           </h1>
           <p className="cp-in mt-5 max-w-xl text-lg text-white/65">{campaign.subtitle}</p>
           <div className="mt-10">
-            <Countdown />
+            <Countdown now={now} phase={phase} />
           </div>
           <ul className="cp-in mt-10 flex flex-wrap gap-2">
             {campaign.perks.map((p) => (
@@ -107,7 +150,7 @@ export default function Campaign() {
             ))}
           </ul>
           <a href={whatsappLink(msg)} target="_blank" rel="noopener" className="cp-in mt-10 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-4 font-semibold transition hover:brightness-110">
-            <WhatsAppGlyph className="size-5" /> Receber as ofertas no WhatsApp
+            <WhatsAppGlyph className="size-5" /> {main}
           </a>
         </div>
       </section>

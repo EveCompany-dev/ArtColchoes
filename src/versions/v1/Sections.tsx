@@ -36,8 +36,11 @@ export function BrandMarquee() {
           <div key={k} className="flex items-center" aria-hidden={k === 1}>
             {row.map((b, i) => (
               <span key={i} className="flex items-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={b.logo} alt={k === 0 && i < brands.length ? b.name : ""} className="mx-10 h-9 w-auto opacity-80 brightness-0 invert sm:mx-14 sm:h-12" />
+                {/* logos com fundo próprio (Pikolin, D'Angelis) somem com invert: ficam nas cores oficiais sobre um chip claro */}
+                <span className="mx-6 rounded-xl bg-white px-5 py-3 sm:mx-10 sm:px-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={b.logo} alt={k === 0 && i < brands.length ? b.name : ""} className="h-7 w-auto sm:h-9" />
+                </span>
                 <span className="size-1.5 rounded-full bg-sky" />
               </span>
             ))}
