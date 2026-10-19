@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Michroma, Space_Grotesk } from "next/font/google";
+import { Manrope, Michroma } from "next/font/google";
 import "./globals.css";
 import { cities, site } from "@/lib/site";
 
 // Michroma é a mais próxima da tipografia do logo (família Microgramma/Eurostile)
-const michroma = Michroma({ variable: "--font-michroma", weight: "400", subsets: ["latin"], display: "swap" });
-const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap" });
-const grotesk = Space_Grotesk({ variable: "--font-grotesk", subsets: ["latin"], display: "swap" });
+const michroma = Michroma({ variable: "--font-michroma", weight: "400", subsets: ["latin"], display: "swap", preload: true });
+const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap", preload: true });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -36,7 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${michroma.variable} ${manrope.variable} ${grotesk.variable} antialiased`}>
+    <html lang="pt-BR" className={`${michroma.variable} ${manrope.variable} antialiased`}>
       <body>{children}</body>
     </html>
   );

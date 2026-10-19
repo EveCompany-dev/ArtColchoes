@@ -77,7 +77,7 @@ export default function FirmnessGuide({ theme = "light", accent = "#c4703a" }: {
       <div className="space-y-7">
         {questions.map((q) => (
           <fieldset key={q.id}>
-            <legend className={`mb-3 text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/50" : "text-black/45"}`}>{q.label}</legend>
+            <legend className={`mb-3 text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/70" : "text-black/65"}`}>{q.label}</legend>
             <div className="flex flex-wrap gap-2">
               {q.options.map((o, i) => {
                 const on = ans[q.id] === i;
@@ -87,12 +87,12 @@ export default function FirmnessGuide({ theme = "light", accent = "#c4703a" }: {
                     type="button"
                     onClick={() => setAns((a) => ({ ...a, [q.id]: i }))}
                     aria-pressed={on}
-                    className={`rounded-full px-4 py-2 text-sm transition ${
+                    className={`min-h-11 rounded-full px-5 py-2.5 text-sm transition ${
                       on
                         ? "text-white"
                         : dark
-                          ? "bg-white/5 text-white/75 hover:bg-white/10"
-                          : "bg-black/[0.04] text-black/70 hover:bg-black/[0.08]"
+                                              ? "bg-white/5 text-white/80 hover:bg-white/10"
+                                              : "bg-black/[0.04] text-black/75 hover:bg-black/[0.08]"
                     }`}
                     style={on ? { background: accent } : undefined}
                   >
@@ -106,25 +106,25 @@ export default function FirmnessGuide({ theme = "light", accent = "#c4703a" }: {
       </div>
 
       <div className="flex flex-col">
-        <p className={`text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/50" : "text-black/45"}`}>Indicação de firmeza</p>
+        <p className={`text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/70" : "text-black/65"}`}>Indicação de firmeza</p>
         <p className="font-display mt-2 text-3xl sm:text-4xl">{firmnessLabel[firm]}</p>
         <div className="relative mt-6 mb-2 h-2 rounded-full" style={{ background: `linear-gradient(90deg, #bfe3f0, #8fb2d6, #5b76a8, #2e3f6b, #0b1630)` }}>
           <span className="fg-needle absolute top-1/2 left-0 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white shadow-md" style={{ background: accent }} />
         </div>
-        <div className={`flex justify-between text-[11px] ${dark ? "text-white/45" : "text-black/40"}`}>
+        <div className={`flex justify-between         text-xs ${dark ? "text-white/70" : "text-black/65"}`}>
           <span>Mais macio</span>
           <span>Mais firme</span>
         </div>
 
-        <p className={`mt-8 mb-3 text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/50" : "text-black/45"}`}>Modelos para testar no showroom</p>
+        <p className={`mt-8 mb-3 text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/70" : "text-black/65"}`}>Modelos para testar no showroom</p>
         <ul className="space-y-2">
           {matches.map((p) => (
             <li key={p.slug} className={`fg-match flex items-center justify-between rounded-xl px-4 py-3 ${dark ? "bg-white/5" : "bg-black/[0.03]"}`}>
               <span>
                 <strong className="font-semibold">{p.brand} {p.name}</strong>
-                <span className={`ml-2 text-sm ${dark ? "text-white/50" : "text-black/45"}`}>{p.line}</span>
+                <span className={`ml-2 text-sm ${dark ? "text-white/70" : "text-black/65"}`}>{p.line}</span>
               </span>
-              <span className={`text-xs ${dark ? "text-white/60" : "text-black/50"}`}>{firmnessLabel[p.firmness!]}</span>
+              <span className={`text-xs ${dark ? "text-white/70" : "text-black/65"}`}>{firmnessLabel[p.firmness!]}</span>
             </li>
           ))}
         </ul>
@@ -137,7 +137,7 @@ export default function FirmnessGuide({ theme = "light", accent = "#c4703a" }: {
         >
           <WhatsAppGlyph className="size-5" /> Enviar para um consultor
         </a>
-        <p className={`mt-3 text-xs ${dark ? "text-white/40" : "text-black/40"}`}>Pré-indicação. A escolha ideal é feita deitando no colchão, no nosso showroom.</p>
+        <p className={`mt-3 text-xs ${dark ? "text-white/70" : "text-black/65"}`}>Pré-indicação. A escolha ideal é feita deitando no colchão, no nosso showroom.</p>
       </div>
     </div>
   );

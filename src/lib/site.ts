@@ -1,5 +1,5 @@
 // Conteúdo institucional da Art Colchões, extraído do briefing (21/09/2026).
-// Tudo que é compartilhado entre as versões /v1, /v2 e /v3 fica aqui.
+// Contatos, endereço, textos e fotos usados em todo o site.
 
 export const site = {
   name: "Art Colchões",

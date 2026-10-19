@@ -1,5 +1,6 @@
 // Campanha sazonal (briefing: 10.10 já previsto; estrutura reaproveitável para 8.8, Black Friday etc.).
-// Para uma nova campanha, basta trocar os dados abaixo e publicar de novo.
+// A página fica fora do ar em src/app/_campanha (pasta com "_" não vira rota).
+// Para uma nova campanha: trocar os dados abaixo e seguir o passo a passo do README.
 
 export const campaign = {
   slug: "10-10",

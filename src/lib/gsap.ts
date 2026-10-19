@@ -5,10 +5,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { SplitText } from "gsap/SplitText";
 import { Flip } from "gsap/Flip";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText, Flip, DrawSVGPlugin, useGSAP);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText, Flip, useGSAP);
+
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 export { gsap, ScrollTrigger, ScrollSmoother, SplitText, Flip, useGSAP };
 

@@ -3,7 +3,6 @@
 @theme {
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-michroma), var(--font-manrope), sans-serif;
-  --font-grotesk: var(--font-grotesk), var(--font-manrope), sans-serif;
 
   --color-navy: #0b1630;
   --color-navy-2: #13244b;
@@ -11,6 +10,10 @@
   --color-sand: #e9e1d4;
   --color-copper: #c4703a;
   --color-sky: #2f6bff;
+  --color-night: #070d1f;
+  --color-night-2: #0a1228;
+  --color-night-3: #13244b;
+  --color-glow: #9db8ff;
 }
 
 html {
@@ -37,6 +40,23 @@ body {
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* foco visível para navegação por teclado */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-glow);
+  outline-offset: 3px;
+  border-radius: 0.375rem;
+}
+
+/* área de toque mínima de 44px em links de texto */
+.touch-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
 }
 
 ::selection {

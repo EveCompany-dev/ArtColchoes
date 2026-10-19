@@ -1,11 +1,16 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { site, whatsappLink } from "@/lib/site";
 import Icon, { WhatsAppGlyph } from "./Icon";
 
-export const nav = [
+export type NavItem = { href: string; label: string };
+
+const telHref = `tel:+${site.whatsapp}`;
+
+export const nav: NavItem[] = [
   { href: "#showroom", label: "Showroom" },
   { href: "#tecnologia", label: "Tecnologia" },
   { href: "#produtos", label: "Produtos" },
@@ -19,13 +24,24 @@ type Props = {
   /** fundo depois de rolar */
   barTone?: "light" | "dark";
   accent?: string;
+  items?: NavItem[];
+  homeHref?: string;
 };
+
+function isActive(href: string, pathname: string) {
+  if (href.includes("#")) return false;
+  const norm = (v: string) => (v.endsWith("/") ? v : `${v}/`);
+  return norm(href) === norm(pathname);
+}
 
 export default function Header({
   heroTone = "dark",
   barTone = "light",
   accent = "#0b1630",
+  items = nav,
+  homeHref = "#",
 }: Props) {
+  const pathname = usePathname() ?? "";
   const root = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
@@ -114,8 +130,8 @@ export default function Header({
           className={`mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-8 ${text}`}
         >
           <a
-            href="#"
-            className="hd-item relative z-10"
+            href={homeHref}
+            className="hd-item relative z-10 inline-flex min-h-11 items-center"
             aria-label="Art Colchões - início"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -134,16 +150,20 @@ export default function Header({
             className="hidden items-center gap-8 lg:flex"
             aria-label="Principal"
           >
-            {nav.map((n) => (
+            {items.map((n) => {
+              const active = isActive(n.href, pathname);
+              return (
               <a
                 key={n.href}
                 href={n.href}
-                className="hd-item group relative text-sm font-medium"
+                aria-current={active ? "page" : undefined}
+                className="hd-item group relative inline-flex min-h-11 items-center text-sm font-medium"
               >
                 {n.label}
-                <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-300 group-hover:origin-left group-hover:scale-x-100" />
+                <span className={`absolute bottom-2 left-0 h-px w-full bg-current transition-transform duration-300 ${active ? "scale-x-100" : "origin-right scale-x-0 group-hover:origin-left group-hover:scale-x-100"}`} />
               </a>
-            ))}
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-3">
@@ -152,7 +172,7 @@ export default function Header({
                 href={whatsappLink()}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 style={{ background: accent }}
               >
                 <WhatsAppGlyph className="size-4" /> {site.phone}
@@ -162,7 +182,7 @@ export default function Header({
               type="button"
               onClick={toggle}
               aria-expanded={open}
-              aria-label="Menu"
+              aria-label={open ? "Fechar menu" : "Abrir menu"}
               className={`hd-item relative z-10 grid size-11 place-items-center rounded-full lg:hidden ${open ? "text-white" : ""}`}
             >
               <span className="relative block h-3 w-6">
@@ -182,19 +202,22 @@ export default function Header({
         className={`mm-panel fixed inset-0 z-30 bg-navy px-6 pt-28 pb-10 text-white lg:hidden ${open ? "" : "pointer-events-none invisible"}`}
       >
         <nav className="flex flex-col gap-2" aria-label="Menu mobile">
-          {nav.map((n) => (
+          {items.map((n) => (
             <a
               key={n.href}
               href={n.href}
               onClick={() => setOpen(false)}
-              className="mm-link font-display border-b border-white/10 py-4 text-2xl"
+              aria-current={isActive(n.href, pathname) ? "page" : undefined}
+              className="mm-link font-display border-b border-white/10 py-4 text-2xl aria-[current=page]:text-glow"
             >
               {n.label}
             </a>
           ))}
         </nav>
-        <div className="mm-link mt-10 space-y-3 text-sm text-white/70">
-          <p className="flex items-center gap-2">
+        <div className="mm-link mt-10 space-y-3 text-sm text-white/75">
+          <a href={telHref} className="touch-link gap-2 font-semibold text-white">
+            <Icon name="phone" className="size-4" /> Ligar: {site.phone}
+          </a>          <p className="flex items-center gap-2">
             <Icon name="pin" className="size-4" /> {site.address.full}
           </p>
           <p className="flex items-center gap-2">
