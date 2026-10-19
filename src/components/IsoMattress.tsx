@@ -94,7 +94,7 @@ export default function IsoMattress({ layers, explodeRoom = 0, badges = false, c
               <g className="iso-badge" transform={`translate(${bx - 26} ${by})`}>
                 <line x1="12" y1="0" x2="26" y2="0" stroke={badgeColor} strokeOpacity="0.5" />
                 <circle r="11" fill={badgeColor} />
-                <text textAnchor="middle" dy="4" fontSize="11" fontWeight="700" fill="#fff">
+                <text textAnchor="middle" dy="4" fontSize="12" fontWeight="700" fill="#fff">
                   {i + 1}
                 </text>
               </g>

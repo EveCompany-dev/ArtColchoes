@@ -55,21 +55,21 @@ export function TechHighlights() {
           ].map(({ t, art }) => (
             <article key={t.name} className="th-card rounded-[2rem] bg-white/[0.04] p-8 ring-1 ring-white/10 sm:p-10">
               <div className="rounded-2xl bg-night-2 p-6">{art}</div>
-              <p className="th-in mt-8 text-xs font-semibold tracking-widest text-white/40 uppercase">{t.kicker}</p>
+              <p className="th-in mt-8 text-xs font-semibold tracking-widest text-white/65 uppercase">{t.kicker}</p>
               <div className="th-in mt-2 flex flex-wrap items-baseline justify-between gap-4">
                 <h3 className="font-display text-2xl sm:text-3xl">{t.name}</h3>
                 <p className="font-display text-3xl text-sky">
-                  {t.metric} <span className="font-sans text-sm text-white/50">{t.metricLabel}</span>
+                  {t.metric} <span className="font-sans text-sm text-white/65">{t.metricLabel}</span>
                 </p>
               </div>
-              <p className="th-in mt-4 leading-relaxed text-white/60">{t.text}</p>
+              <p className="th-in mt-4 leading-relaxed text-white/70">{t.text}</p>
             </article>
           ))}
         </div>
         <div className="th-card mt-5 flex flex-col items-start gap-6 rounded-[2rem] bg-gradient-to-r from-[#b8622f]/25 to-transparent p-8 ring-1 ring-[#e0894f]/25 sm:flex-row sm:items-center sm:p-10">
           <span className="th-in font-display grid size-20 shrink-0 place-items-center rounded-2xl bg-[#c4703a] text-2xl">Cu</span>
           <div className="th-in">
-            <p className="text-xs font-semibold tracking-widest text-white/40 uppercase">{copper.kicker}</p>
+            <p className="text-xs font-semibold tracking-widest text-white/65 uppercase">{copper.kicker}</p>
             <h3 className="font-display mt-2 text-2xl">{copper.name}</h3>
             <p className="mt-2 max-w-2xl text-white/65">{copper.text}</p>
           </div>
