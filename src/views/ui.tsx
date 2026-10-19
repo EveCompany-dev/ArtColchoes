@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, type ReactNode } from "react";
 import { gsap, SplitText } from "@/lib/gsap";
@@ -71,16 +71,15 @@ export function PageIntro({ kicker, title, text, crumb }: { kicker: string; titl
   }, root);
 
   return (
-    <section ref={root} className="relative overflow-hidden bg-night px-5 pt-32 pb-16 sm:px-8 sm:pt-44 sm:pb-24">
+    <section ref={root} className="relative overflow-hidden bg-night px-5 pt-28 pb-10 sm:px-8 sm:pt-44 sm:pb-24">
       <div aria-hidden="true" className="pi-glow pointer-events-none absolute -top-1/3 right-[-10%] size-[60vmax] rounded-full bg-[radial-gradient(circle,rgba(47,107,255,0.28),rgba(47,107,255,0.06)_45%,transparent_68%)]" />
       <div className="relative mx-auto max-w-7xl">
-        <nav aria-label="Você está em" className="pi-in text-sm text-white/45">
+        <nav aria-label="Você está em" className="pi-in text-sm text-white/65">
           <a href={routes.home} className="hover:text-white">Início</a>
           <span className="mx-2">/</span>
           <span className="text-white/80">{crumb}</span>
         </nav>
-        <div className="pi-in mt-10">
-          <Kicker>{kicker}</Kicker>
+        <div className="pi-in mt-6 sm:mt-10">`n          <Kicker>{kicker}</Kicker>
         </div>
         <h1 className="pi-title font-display mt-5 max-w-4xl text-4xl leading-[1.08] sm:text-6xl lg:text-7xl">{title}</h1>
         <p className="pi-in mt-8 max-w-2xl text-lg leading-relaxed text-white/60">{text}</p>
@@ -93,8 +92,8 @@ export function CtaBand({ title, text, message, secondary }: { title: string; te
   const root = useRef<HTMLElement>(null);
   useTitleReveal(root);
   return (
-    <section ref={root} className="bg-night px-5 py-24 sm:px-8 sm:py-32">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-night-3 to-night-2 p-8 ring-1 ring-white/10 sm:p-14">
+    <section ref={root} className="bg-night px-5 py-16 sm:px-8 sm:py-32">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-night-3 to-night-2 p-6 ring-1 ring-white/10 sm:p-14">
         <span aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-sky/20 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
@@ -116,3 +115,4 @@ export function CtaBand({ title, text, message, secondary }: { title: string; te
     </section>
   );
 }
+
