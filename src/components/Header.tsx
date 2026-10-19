@@ -8,6 +8,8 @@ import Icon, { WhatsAppGlyph } from "./Icon";
 
 export type NavItem = { href: string; label: string };
 
+const telHref = `tel:+${site.whatsapp}`;
+
 export const nav: NavItem[] = [
   { href: "#showroom", label: "Showroom" },
   { href: "#tecnologia", label: "Tecnologia" },
@@ -129,7 +131,7 @@ export default function Header({
         >
           <a
             href={homeHref}
-            className="hd-item relative z-10"
+            className="hd-item relative z-10 inline-flex min-h-11 items-center"
             aria-label="Art Colchões - início"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -155,10 +157,10 @@ export default function Header({
                 key={n.href}
                 href={n.href}
                 aria-current={active ? "page" : undefined}
-                className="hd-item group relative text-sm font-medium"
+                className="hd-item group relative inline-flex min-h-11 items-center text-sm font-medium"
               >
                 {n.label}
-                <span className={`absolute -bottom-1 left-0 h-px w-full bg-current transition-transform duration-300 ${active ? "scale-x-100" : "origin-right scale-x-0 group-hover:origin-left group-hover:scale-x-100"}`} />
+                <span className={`absolute bottom-2 left-0 h-px w-full bg-current transition-transform duration-300 ${active ? "scale-x-100" : "origin-right scale-x-0 group-hover:origin-left group-hover:scale-x-100"}`} />
               </a>
               );
             })}
@@ -170,7 +172,7 @@ export default function Header({
                 href={whatsappLink()}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 style={{ background: accent }}
               >
                 <WhatsAppGlyph className="size-4" /> {site.phone}
@@ -180,7 +182,7 @@ export default function Header({
               type="button"
               onClick={toggle}
               aria-expanded={open}
-              aria-label="Menu"
+              aria-label={open ? "Fechar menu" : "Abrir menu"}
               className={`hd-item relative z-10 grid size-11 place-items-center rounded-full lg:hidden ${open ? "text-white" : ""}`}
             >
               <span className="relative block h-3 w-6">
@@ -212,8 +214,10 @@ export default function Header({
             </a>
           ))}
         </nav>
-        <div className="mm-link mt-10 space-y-3 text-sm text-white/70">
-          <p className="flex items-center gap-2">
+        <div className="mm-link mt-10 space-y-3 text-sm text-white/75">
+          <a href={telHref} className="touch-link gap-2 font-semibold text-white">
+            <Icon name="phone" className="size-4" /> Ligar: {site.phone}
+          </a>          <p className="flex items-center gap-2">
             <Icon name="pin" className="size-4" /> {site.address.full}
           </p>
           <p className="flex items-center gap-2">
