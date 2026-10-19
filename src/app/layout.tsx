@@ -4,8 +4,8 @@ import "./globals.css";
 import { cities, site } from "@/lib/site";
 
 // Michroma é a mais próxima da tipografia do logo (família Microgramma/Eurostile)
-const michroma = Michroma({ variable: "--font-michroma", weight: "400", subsets: ["latin"], display: "swap" });
-const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap" });
+const michroma = Michroma({ variable: "--font-michroma", weight: "400", subsets: ["latin"], display: "swap", preload: true });
+const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap", preload: true });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
