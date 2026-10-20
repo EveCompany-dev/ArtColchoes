@@ -148,11 +148,11 @@ export default function TechLayers() {
               </li>
             ))}
           </ol>
+          <a href="#tecnologias" onClick={skip} className="mx-auto mt-4 block w-fit rounded-full border border-white/30 bg-night/70 px-4 py-2 text-xs font-semibold text-white backdrop-blur transition hover:bg-white hover:text-night motion-reduce:hidden">
+            Pular explicação
+          </a>
         </div>
       </div>
-      <a href="#tecnologias" onClick={skip} className="absolute right-5 bottom-3 z-10 rounded-full border border-white/30 bg-night/70 px-4 py-2 text-xs font-semibold text-white backdrop-blur transition hover:bg-white hover:text-night motion-reduce:hidden sm:right-8">
-        Pular explicação
-      </a>
     </section>
   );
 }

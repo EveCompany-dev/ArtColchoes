@@ -57,7 +57,16 @@ export function Differentials() {
   useTitleReveal(root);
   useScrollAnim(() => {
     gsap.matchMedia().add("(min-width: 1024px)", () => {
-      ScrollTrigger.create({ trigger: ".df-grid", start: "top 120px", end: "bottom bottom", pin: ".df-side", pinSpacing: false });
+      const side = document.querySelector<HTMLElement>(".df-side");
+      ScrollTrigger.create({
+        trigger: ".df-grid",
+        start: "top 120px",
+        // para quando a base do bloco encosta na base do último item da lista
+        end: () => `bottom ${120 + (side?.offsetHeight ?? 0)}px`,
+        pin: ".df-side",
+        pinSpacing: false,
+        invalidateOnRefresh: true,
+      });
     });
     gsap.utils.toArray<HTMLElement>(".df-item").forEach((el) => {
       const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 80%" } });
@@ -82,15 +91,15 @@ export function Differentials() {
         </div>
         <ol>
           {differentials.map((d, i) => (
-            <li key={d.title} className="df-item relative py-7 sm:py-10">
-              <span className="df-line absolute top-0 left-0 h-px w-full bg-white/15" />
+            <li key={d.title} className="df-item group relative py-7 transition-[translate] duration-300 ease-out hover:translate-x-2 sm:py-10">
+              <span className="df-line absolute top-0 left-0 h-px w-full bg-white/15 transition-colors duration-300 group-hover:bg-sky" />
               <div className="flex gap-6 sm:gap-10">
                 <span className="df-in font-display text-sm text-glow">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex-1">
-                  <h3 className="df-in font-display text-xl sm:text-3xl">{d.title}</h3>
-                  <p className="df-in mt-3 max-w-lg leading-relaxed text-white/65">{d.text}</p>
+                  <h3 className="df-in font-display text-xl transition-colors duration-300 group-hover:text-glow sm:text-3xl">{d.title}</h3>
+                  <p className="df-in mt-3 max-w-lg leading-relaxed text-white/65 transition-colors duration-300 group-hover:text-white/90">{d.text}</p>
                 </div>
-                <span className="df-icon grid size-10 shrink-0 sm:size-14 place-items-center rounded-full bg-sky/15 text-glow ring-1 ring-sky/30">
+                <span className="df-icon grid size-10 shrink-0 sm:size-14 place-items-center rounded-full bg-sky/15 text-glow ring-1 ring-sky/30 transition-colors duration-300 group-hover:bg-sky group-hover:text-white group-hover:ring-sky">
                   <Icon name={d.icon} className="size-6" />
                 </span>
               </div>
@@ -116,13 +125,16 @@ export function Ambientes() {
     [photos.espacoHerval, "Espaço Herval"],
     [photos.camaBanho, "Espaço de cama & banho"],
   ];
-  const galleryCard = ([src, alt]: [string, string], index: number) => (
-    <figure key={src} className="amb-img relative mb-3 overflow-hidden rounded-2xl sm:mb-5 sm:rounded-3xl">
-      <Img name={src} alt={alt} sizes="33vw" className={`w-full object-cover ${["aspect-[3/4]", "aspect-[5/4]", "aspect-[4/5]"][index % 3]}`} />
-      <figcaption className="absolute inset-x-2 bottom-2 rounded-lg bg-black/60 px-3 py-2 text-xs font-medium text-white sm:inset-x-3 sm:bottom-3 sm:rounded-xl sm:text-sm">{alt}</figcaption>
+  const drag = useRef({ active: false, x: 0, left: 0 });
+  const stage = useRef<HTMLDivElement>(null);
+  const spans = ["col-span-2 row-span-2", "row-span-2", "row-span-2", "", "", "row-span-2", "", "", "row-span-2"];
+  const mosaic = [0, 1, 2].flatMap((copy) => galleryImages.map((image, i) => ({ image, copy, span: spans[i] })));
+  const galleryCard = ({ image: [src, alt], copy, span }: (typeof mosaic)[number], index: number) => (
+    <figure key={index} aria-hidden={copy > 0} className={`amb-img group relative overflow-hidden rounded-2xl ${span}`}>
+      <Img name={src} alt={copy > 0 ? "" : alt} sizes="25vw" draggable={false} className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+      <figcaption className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-12 text-sm font-medium text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">{alt}</figcaption>
     </figure>
-  );
-  const mobileGalleryCard = ([src, alt]: [string, string]) => (
+  );  const mobileGalleryCard = ([src, alt]: [string, string]) => (
     <figure key={src} className="amb-img relative mb-4 overflow-hidden rounded-2xl bg-[#0b1428]">
       <Img name={src} alt={alt} sizes="50vw" className="block h-auto w-full object-contain" />
       <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 pb-3 pt-8 text-xs font-medium text-white">{alt}</figcaption>
@@ -130,8 +142,8 @@ export function Ambientes() {
   );
 
   return (
-    <section ref={root} className="overflow-hidden bg-night-2 px-5 py-12 sm:px-8 sm:py-36">
-      <div className="mx-auto max-w-7xl">
+    <section ref={root} className="overflow-hidden bg-night-2 px-5 py-12 sm:px-0 sm:py-28">
+      <div className="mx-auto max-w-7xl sm:px-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
           <div>
             <Kicker>Showroom</Kicker>
@@ -146,14 +158,28 @@ export function Ambientes() {
             </div>
           ))}
         </div>
-        <div className="amb-gallery mt-16 hidden grid-cols-3 gap-5 sm:grid">
-          {[0, 1, 2].map((column) => (
-            <div key={column} className={`flex flex-col ${column === 1 ? "pt-20" : column === 2 ? "pt-10" : ""}`}>
-              {galleryImages.filter((_, index) => index % 3 === column).map((image, row) => galleryCard(image, row + column))}
-            </div>
-          ))}
+      </div>
+      <div
+        ref={stage}
+        onPointerDown={(e) => {
+          if (e.pointerType !== "mouse" || !stage.current) return;
+          e.preventDefault();
+          drag.current = { active: true, x: e.clientX, left: stage.current.scrollLeft };
+          stage.current.setPointerCapture(e.pointerId);
+        }}
+        onPointerMove={(e) => {
+          if (drag.current.active && stage.current) stage.current.scrollLeft = drag.current.left - (e.clientX - drag.current.x);
+        }}
+        onPointerUp={() => (drag.current.active = false)}
+        onPointerCancel={() => (drag.current.active = false)}
+        style={{ maskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)" }}
+        className="amb-gallery mt-16 hidden cursor-grab select-none overflow-x-auto overflow-y-hidden [scrollbar-width:none] active:cursor-grabbing sm:block [&::-webkit-scrollbar]:hidden"
+      >
+        <div className="grid w-max auto-cols-[calc(var(--row)*1.1)] grid-flow-col-dense grid-rows-[repeat(4,var(--row))] gap-2 [--row:clamp(10rem,21svh,15rem)] lg:gap-3">
+          {mosaic.map(galleryCard)}
         </div>
       </div>
+      <p className="mt-5 hidden text-center text-xs tracking-[0.3em] text-white/40 uppercase sm:block">Arraste para explorar</p>
     </section>
   );
 }
@@ -263,11 +289,60 @@ export function Categories() {
           scrollTrigger: { trigger: panel, containerAnimation: tween, start: "left right", end: "right left", scrub: true },
         });
       });
+
+      // Arrastar com mouse ou toque move a rolagem da página, que por sua vez conduz a faixa horizontal.
+      const el = root.current!;
+      const st = tween.scrollTrigger!;
+      let startX = 0;
+      let startScroll = 0;
+      let dragging = false;
+      let moved = false;
+      const onMove = (e: PointerEvent) => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 5) moved = true;
+        const ratio = (st.end - st.start) / distance();
+        window.scrollTo(0, Math.min(st.end, Math.max(st.start, startScroll - dx * ratio)));
+      };
+      const onUp = () => {
+        dragging = false;
+        el.classList.remove("cursor-grabbing");
+      };
+      const onDown = (e: PointerEvent) => {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        dragging = true;
+        moved = false;
+        startX = e.clientX;
+        startScroll = window.scrollY;
+        el.classList.add("cursor-grabbing");
+      };
+      const onClick = (e: MouseEvent) => {
+        if (moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = false;
+        }
+      };
+      const onDragStart = (e: Event) => e.preventDefault();
+      el.addEventListener("pointerdown", onDown);
+      el.addEventListener("click", onClick, true);
+      el.addEventListener("dragstart", onDragStart);
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", onUp);
+      return () => {
+        el.removeEventListener("pointerdown", onDown);
+        el.removeEventListener("click", onClick, true);
+        el.removeEventListener("dragstart", onDragStart);
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", onUp);
+      };
     });
   }, root);
 
   return (
-    <section id="categorias" ref={root} className="relative overflow-hidden bg-night-2 lg:motion-safe:h-[100svh]">
+    <section id="categorias" ref={root} className="relative select-none overflow-hidden bg-night-2 lg:motion-safe:h-[100svh] lg:motion-safe:cursor-grab lg:motion-safe:touch-pan-y">
       <div className="cat-track grid grid-cols-2 gap-3 px-5 py-12 sm:gap-4 sm:px-8 sm:py-16 lg:grid-cols-3 lg:gap-5 lg:px-8 lg:motion-safe:flex lg:motion-safe:h-full lg:motion-safe:w-max lg:motion-safe:items-stretch lg:motion-safe:gap-0 lg:motion-safe:p-0">
         <div className="col-span-2 flex flex-col justify-center pb-4 lg:col-span-3 lg:motion-safe:col-auto lg:motion-safe:w-[48vw] lg:motion-safe:shrink-0 lg:motion-safe:px-20 lg:motion-safe:pb-0">
           <Kicker>Categorias</Kicker>
@@ -278,7 +353,7 @@ export function Categories() {
         {categories.map((c, i) => (
           <article key={c.slug} className="cat-panel relative flex min-h-[250px] flex-col justify-between overflow-hidden rounded-2xl border border-white/5 bg-night p-4 sm:min-h-[300px] sm:p-6 lg:min-h-[340px] lg:motion-safe:min-h-0 lg:motion-safe:w-[34vw] lg:motion-safe:shrink-0 lg:motion-safe:rounded-none lg:motion-safe:border-0 lg:motion-safe:p-12">
             <div className="absolute inset-0 overflow-hidden">
-              <Img name={categoryPhotos[c.slug]} alt={`${c.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 40vw, 50vw" className="cat-art size-full object-cover" />
+              <Img name={categoryPhotos[c.slug]} alt={`${c.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 40vw, 50vw" draggable={false} className="cat-art size-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/10" />
             </div>
             <span className="cat-num font-display relative text-4xl leading-none text-glow opacity-60 lg:motion-safe:text-[12vw] lg:motion-safe:opacity-40">{String(i + 1).padStart(2, "0")}</span>
@@ -343,8 +418,7 @@ export function Products() {
     <section id="catalogo" ref={root} className="bg-night px-5 py-12 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <Kicker>Colchões em destaque</Kicker>
-        <h2 className="reveal-title font-display mt-5 max-w-3xl text-3xl leading-tight sm:text-5xl">Encontre o conforto do seu jeito.</h2>
-        <p className="mt-5 mb-8 max-w-xl sm:mb-12 text-white/60">Valores e condições especiais direto de fábrica, pelo WhatsApp.</p>
+        <h2 className="reveal-title font-display mt-5 mb-5 max-w-3xl text-3xl leading-tight sm:text-5xl">Encontre o conforto do seu jeito.</h2>
         <ProductGrid theme="dark" accent={BLUE} />
       </div>
     </section>
@@ -376,12 +450,26 @@ export function FaqSection() {
   const root = useRef<HTMLElement>(null);
   useTitleReveal(root);
   useScrollAnim(() => {
+    const section = root.current;
+    const side = section?.querySelector<HTMLElement>(".faq-side");
+    const questionButtons = section?.querySelectorAll<HTMLElement>(".faq-questions button");
+    const lastQuestion = questionButtons?.item((questionButtons.length ?? 1) - 1);
+    if (!section || !side || !lastQuestion) return;
+
     gsap.matchMedia().add("(min-width: 1024px)", () => {
-      ScrollTrigger.create({ trigger: ".faq-questions", start: "top 120px", end: "bottom top", pin: ".faq-side", pinSpacing: false });
+      ScrollTrigger.create({
+        trigger: section,
+        endTrigger: lastQuestion,
+        start: "top 120px",
+        end: () => `bottom ${120 + side.offsetHeight + parseFloat(getComputedStyle(section).paddingBottom)}px`,
+        pin: side,
+        pinSpacing: false,
+        invalidateOnRefresh: true,
+      });
     });
   }, root);
   return (
-    <section ref={root} className="bg-night px-5 pb-8 sm:px-8">
+    <section ref={root} className="bg-night px-5 pt-8 pb-8 sm:px-8">
       <div className="faq-grid mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.6fr]">
         <div className="faq-side self-start">
           <p className="text-white/60">Não achou sua dúvida? Chame no WhatsApp, respondemos rapidinho.</p>

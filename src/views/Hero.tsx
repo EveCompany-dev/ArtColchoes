@@ -64,11 +64,11 @@ export default function Hero() {
     const mm = gsap.matchMedia();
     mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
       gsap.utils.toArray<HTMLElement>(".hero-track").forEach((track, i) => {
-        const start = [0, -17, -34][i % 3];
+        const start = [0, -8, -16][i % 3];
         gsap.fromTo(
           track,
           { yPercent: start },
-          { yPercent: start - 50, duration: 42 + ((i * 11) % 19), delay: i * 1.3, ease: "none", repeat: -1 },
+          { yPercent: start - 25, duration: 21 + ((i * 6) % 10), delay: i * 1.3, ease: "none", repeat: -1 },
         );
       });
       gsap.from(".hero-col", { yPercent: 12, opacity: 0, stagger: 0.12, duration: 1.8, delay: 0.2 });
@@ -76,6 +76,13 @@ export default function Hero() {
         y: 80,
         scale: 1.08,
         scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+      });
+    });
+
+    // evita imagens surgindo de repente: as colunas só existem em lg+, então carrega tudo de uma vez
+    mm.add("(min-width: 1024px)", () => {
+      gsap.utils.toArray<HTMLImageElement>(".hero-track img").forEach((img) => {
+        img.loading = "eager";
       });
     });
 
@@ -98,13 +105,13 @@ export default function Hero() {
       <div aria-hidden="true" className="hero-glow pointer-events-none absolute top-1/2 left-[70%] z-0 size-[75vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(47,107,255,0.32),rgba(47,107,255,0.07)_42%,transparent_66%)]" />
       <div
         aria-hidden="true"
-        className="hero-cols absolute inset-x-0 bottom-0 top-auto z-[3] hidden h-[30svh] w-full gap-3 px-3 opacity-80 sm:gap-4 lg:inset-y-0 lg:right-0 lg:left-auto lg:flex lg:h-auto lg:w-[44%] lg:px-0 lg:pr-8 lg:opacity-100 xl:w-[42%]"
+        className="hero-cols absolute inset-x-0 bottom-0 top-auto z-[3] hidden h-[30svh] w-full gap-3 px-3 opacity-80 sm:gap-4 lg:inset-y-0 lg:right-[clamp(2rem,6vw,8rem)] lg:left-auto lg:flex lg:h-auto lg:w-[calc(44%-2rem)] lg:px-0 lg:opacity-100 xl:w-[calc(42%-2rem)]"
         style={{ maskImage: "linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent)" }}
       >
         {columns.map((col, i) => (
           <div key={i} className={`hero-col flex-1 overflow-hidden ${i === 2 ? "hidden xl:block" : ""}`}>
             <div className="hero-track flex flex-col gap-3 sm:gap-4">
-              {[...col, ...col].map(([src, alt], k) => (
+              {[...col, ...col, ...col, ...col].map(([src, alt], k) => (
                 // lazy (padrão do Img): as colunas ficam ocultas abaixo de 1024px e não devem baixar no celular
                 <Img key={k} name={src} alt={alt} sizes="(min-width:1280px) 14vw, 22vw" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-white/10" />
               ))}
@@ -135,7 +142,7 @@ export default function Hero() {
         ))}
       </div>
 
-      <div className="hero-copy relative z-[4] mx-auto w-full max-w-7xl px-5 sm:px-8">
+      <div className="hero-copy relative z-[4] mx-auto w-full px-5 sm:px-8 lg:px-[clamp(2rem,6vw,8rem)]">
         <div className="flex min-h-[calc(100svh-10rem)] flex-col lg:min-h-0 lg:max-w-[52%]">
           <div className="hero-meta">
             <p className="mx-auto mb-5 flex w-fit items-center justify-center gap-2 text-center text-xs font-semibold tracking-[0.16em] text-white/75 uppercase sm:mb-8 sm:inline-flex sm:rounded-full sm:bg-white/5 sm:px-4 sm:py-2 sm:tracking-widest sm:ring-1 sm:ring-white/10 sm:backdrop-blur lg:mx-0 lg:justify-start lg:text-left">
@@ -158,8 +165,8 @@ export default function Hero() {
               </a>
             </div>
             <div className="mt-8 hidden flex-wrap gap-x-6 gap-y-2 text-sm text-white/70 sm:flex lg:mt-8">
-              <a href={routes.contato} className="flex items-center gap-2 hover:text-white">
-                <Icon name="pin" className="size-4" /> {site.address.full}
+              <a href={routes.contato}               className="group flex items-center gap-2 hover:text-white">
+                              <Icon name="pin" className="size-4 transition-transform duration-200 group-hover:-translate-y-1" /> {site.address.full}
               </a>
               <p className="flex items-center gap-2">
                 <Icon name="clock" className="size-4" /> Seg a sex 9h às 18h · Sáb 9h às 13h

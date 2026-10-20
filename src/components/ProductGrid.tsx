@@ -2,83 +2,14 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Flip, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { firmnessLabel, firmnessScale, products, type Product } from "@/lib/products";
+import { firmnessLabel, products, type Product } from "@/lib/products";
 import { whatsappLink } from "@/lib/site";
-import IsoMattress, { productLayers } from "./IsoMattress";
+import { ProductCard } from "./ProductCard";
 import { WhatsAppGlyph } from "./Icon";
-import Img from "./Img";
+
+export { ProductCard };
 
 type Theme = "light" | "dark";
-
-export function ProductCard({ p, theme = "light", accent }: { p: Product; theme?: Theme; accent: string }) {
-  const dark = theme === "dark";
-  const fi = p.firmness ? firmnessScale.indexOf(p.firmness) : -1;
-  const firm = p.firmness ? firmnessLabel[p.firmness] : "Consultar";
-  const muted = dark ? "text-white/70" : "text-black/65";
-  return (
-    <article className={`group flex h-full flex-col overflow-hidden rounded-3xl transition-shadow duration-500 ${dark ? "bg-night-2 ring-1 ring-white/10 hover:bg-[#172440]" : "bg-white ring-1 ring-black/5 hover:shadow-2xl hover:shadow-black/10"}`}>
-      <div className="relative aspect-[4/3] overflow-hidden" style={{ background: dark ? "linear-gradient(160deg,#1a2749,#0b1328)" : `linear-gradient(160deg, #f7f5f1, ${p.tone.top})` }}>
-        {p.photo ? (
-          <Img name={p.photo} alt={`Colchão ${p.brand} ${p.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="size-full object-cover transition duration-700 motion-reduce:transition-none group-hover:scale-105 motion-reduce:group-hover:scale-100" />
-        ) : (
-          <IsoMattress layers={productLayers(p.tone.top, p.tone.side)} className="absolute inset-0 m-auto h-[82%] w-[82%] transition duration-700 motion-reduce:transition-none group-hover:-translate-y-2 motion-reduce:group-hover:translate-y-0" title={`Ilustração do colchão ${p.name}`} />
-        )}
-        <span className={`absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-semibold tracking-wider uppercase ${dark ? "bg-black/40 text-white backdrop-blur" : "bg-white/85 text-black/70 backdrop-blur"}`}>
-          {p.brand} · {p.line}
-        </span>
-      </div>
-      <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-display text-xl">{p.name}</h3>
-        <p className={`mt-1 text-sm ${muted}`}>{p.tagline}</p>
-
-        <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-          <div>
-            <dt className={`text-xs tracking-wider uppercase ${muted}`}>Altura</dt>
-            <dd className="font-medium">{p.height ? `${p.height} cm` : "Consultar"}</dd>
-          </div>
-          <div>
-            <dt className={`text-xs tracking-wider uppercase ${muted}`}>Mola</dt>
-            <dd className="font-medium">
-              {p.spring ?? "Consultar"}
-              {p.support && <span className={`block text-xs font-normal ${muted}`}>até {p.support} por pessoa</span>}
-            </dd>
-          </div>
-          <div className="col-span-2">
-            <dt className={`mb-1.5 flex justify-between text-xs tracking-wider uppercase ${muted}`}>
-              <span>Firmeza</span>
-              <span>{firm}</span>
-            </dt>
-            <dd className="flex gap-1" aria-label={`Firmeza ${firm}`}>
-              {firmnessScale.map((f, i) => (
-                <span key={f} className={`h-1.5 flex-1 rounded-full ${i <= fi ? "" : dark ? "bg-white/10" : "bg-black/10"}`} style={i <= fi ? { background: accent } : undefined} />
-              ))}
-            </dd>
-          </div>
-        </dl>
-
-        <ul className="mt-5 flex flex-wrap gap-1.5">
-          {p.techs.map((t) => (
-            <li key={t} className={`rounded-full px-2.5 py-1 text-xs ${dark ? "bg-white/10 text-white/80" : "bg-black/[0.05] text-black/65"}`}>
-              {t}
-            </li>
-          ))}
-        </ul>
-
-        <p className={`mt-4 text-xs ${muted}`}>{p.sizes.join(" · ")}</p>
-        <p className={`mt-1 text-xs ${muted}`}>Garantia de fábrica · Pagamento facilitado</p>
-
-        <a
-          href={whatsappLink(`Olá! Tenho interesse no colchão ${p.brand} ${p.name}. Pode me passar valores e condições?`)}
-          target="_blank"
-          rel="noopener"
-          className={`mt-6 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition ${dark ? "bg-white text-navy hover:bg-[#25D366] hover:text-white" : "bg-navy text-white hover:bg-[#25D366]"}`}
-        >
-          <WhatsAppGlyph className="size-4" /> Consultar valores
-        </a>
-      </div>
-    </article>
-  );
-}
 
 function CompactCard({ p, theme, accent }: { p: Product; theme: Theme; accent: string }) {
   const dark = theme === "dark";
@@ -227,9 +158,6 @@ export default function ProductGrid({ theme = "light", accent = "#c4703a", filte
         </div>
       )}
 
-      <p className={`mt-8 text-center text-sm ${dark ? "text-white/65" : "text-black/60"}`}>
-        Além dos colchões: bases box, bases baú, cabeceiras, travesseiros e cama & banho. Tudo a pronta entrega no showroom.
-      </p>
     </div>
   );
 }
