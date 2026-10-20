@@ -9,7 +9,6 @@ import Icon, { WhatsAppGlyph } from "./Icon";
 export type NavItem = { href: string; label: string };
 
 export const nav: NavItem[] = [
-  { href: "#showroom", label: "Showroom" },
   { href: "#tecnologia", label: "Tecnologia" },
   { href: "#produtos", label: "Produtos" },
   { href: "#sobre", label: "Sobre" },
@@ -43,6 +42,7 @@ export default function Header({
   const root = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useGSAP(
@@ -78,37 +78,20 @@ export default function Header({
     },
     { scope: root },
   );
-
-  const { contextSafe } = useGSAP({ scope: root });
-  const toggle = contextSafe(() => {
-    const next = !open;
-    setOpen(next);
-    if (next) {
-      gsap.fromTo(
-        ".mm-panel",
-        { clipPath: "circle(0% at 100% 0%)" },
-        {
-          clipPath: "circle(150% at 100% 0%)",
-          duration: 0.8,
-          ease: "power3.inOut",
-        },
-      );
-      gsap.fromTo(
-        ".mm-link",
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.06,
-          delay: 0.25,
-          duration: 0.6,
-          ease: "power3.out",
-        },
-      );
+  const toggle = () => {
+    if (open) {
+      setOpen(false);
+      return;
     }
-  });
+    setMenuVisible(true);
+    setOpen(true);
+  };
 
-  const tone = scrolled ? barTone : heroTone;
+  const tone = scrolled
+    ? barTone === "dark"
+      ? "light"
+      : "dark"
+    : heroTone;
   const text = tone === "dark" && !open ? "text-navy" : "text-white";
   const barBg = open
     ? "bg-transparent"
@@ -197,22 +180,38 @@ export default function Header({
       </header>
 
       <div
-        className={`mm-panel fixed inset-0 z-30 bg-navy px-6 pt-28 pb-10 text-white lg:hidden ${open ? "" : "pointer-events-none invisible"}`}
+        onTransitionEnd={(event) => {
+          if (event.propertyName === "clip-path" && !open) setMenuVisible(false);
+        }}
+        style={{ clipPath: open ? "circle(150% at 100% 0%)" : "circle(0% at 100% 0%)" }}
+        className={`mm-panel fixed inset-0 z-30 bg-navy px-6 pt-28 pb-10 text-white transition-[clip-path] duration-[800ms] ease-in-out lg:hidden ${menuVisible ? "" : "pointer-events-none invisible"}`}
       >
         <nav className="flex flex-col gap-2" aria-label="Menu mobile">
-          {items.map((n) => (
+          {items.map((n, index) => (
             <a
               key={n.href}
               href={n.href}
               onClick={() => setOpen(false)}
               aria-current={isActive(n.href, pathname) ? "page" : undefined}
-              className="mm-link font-display border-b border-white/10 py-4 text-2xl aria-[current=page]:text-glow"
+              style={{
+                opacity: open ? 1 : 0,
+                transform: open ? "translateY(0)" : "translateY(60px)",
+                transitionDelay: `${open ? 250 + index * 60 : (items.length - index - 1) * 60}ms`,
+              }}
+              className="mm-link font-display border-b border-white/10 py-4 text-2xl transition-[opacity,transform] duration-[600ms] ease-out aria-[current=page]:text-glow"
             >
               {n.label}
             </a>
           ))}
         </nav>
-        <div className="mm-link mt-10 space-y-3 text-sm text-white/70">
+        <div
+          className="mm-link mt-10 space-y-3 text-sm text-white/70 transition-[opacity,transform] duration-[600ms] ease-out"
+          style={{
+            opacity: open ? 1 : 0,
+            transform: open ? "translateY(0)" : "translateY(60px)",
+            transitionDelay: `${open ? 250 + items.length * 60 : 0}ms`,
+          }}
+        >
           <p className="flex items-center gap-2">
             <Icon name="pin" className="size-4" /> {site.address.full}
           </p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { useScrollAnim } from "@/components/Smooth";
 import IsoMattress from "@/components/IsoMattress";
@@ -15,6 +15,8 @@ const n = layers.length;
 // e percorre as camadas, uma de cada vez, com o card de descrição ao lado.
 export default function TechLayers() {
   const root = useRef<HTMLElement>(null);
+  const jumpToLayer = useRef<(index: number) => void>(() => {});
+  const [activeLayer, setActiveLayer] = useState<number | null>(null);
 
   useScrollAnim(() => {
     const els = gsap.utils.toArray<SVGGElement>(".iso-layer").sort((a, b) => +a.dataset.index! - +b.dataset.index!);
@@ -41,8 +43,12 @@ export default function TechLayers() {
 
     layers.forEach((_, k) => {
       const t = 1.2 + k;
-      tl.addLabel(`l${k}`, t + 0.5)
-        .to(els, { opacity: (i) => (i === k ? 1 : 0.42), x: (i) => (i === k ? 26 : 0), duration: 0.5 }, t)
+      tl.addLabel(`layer-${k}`, t + 0.5)
+        .to(els, {
+          opacity: (i) => (i === k ? 1 : 0.42),
+          x: (i) => (i === k ? 26 : 0),
+          duration: 0.5,
+        }, t)
         .to(cards[k], { autoAlpha: 0, y: -18, duration: 0.3 }, t)
         .fromTo(cards[k + 1], { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.3 }, t + 0.2)
         .to(items, { opacity: (i) => (i === k ? 1 : 0.35), duration: 0.3 }, t)
@@ -56,6 +62,15 @@ export default function TechLayers() {
       .fromTo(cards[n + 1], { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.4 }, end + 0.3)
       .to(items, { opacity: 1, duration: 0.3 }, end)
       .addLabel("end");
+
+    jumpToLayer.current = (index) => {
+      const trigger = tl.scrollTrigger;
+      if (trigger) trigger.scroll(trigger.labelToScroll(`layer-${index}`));
+    };
+
+    return () => {
+      jumpToLayer.current = () => {};
+    };
   }, root);
 
   return (
@@ -104,11 +119,21 @@ export default function TechLayers() {
             <div className="tx-bar h-full origin-left bg-sky" style={{ transform: "scaleX(0)" }} />
           </div>
 
-          <ol className="mt-6 hidden grid-cols-2 gap-x-6 gap-y-1.5 text-sm lg:grid">
+          <ol className="mt-4 flex max-h-11 gap-2 overflow-x-auto text-xs lg:mt-6 lg:grid lg:max-h-none lg:grid-cols-2 lg:gap-x-6 lg:gap-y-1.5 lg:overflow-visible lg:text-sm">
             {layers.map((l, i) => (
-              <li key={l.name} className="tx-item flex items-center gap-2.5">
-                <span className="grid size-5 shrink-0 place-items-center rounded-full bg-sky text-[10px] font-bold text-white">{i + 1}</span>
-                {l.short}
+              <li key={l.name} className="tx-item shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveLayer(i);
+                    jumpToLayer.current(i);
+                  }}
+                  aria-pressed={activeLayer === i}
+                  className={`flex items-center gap-2.5 rounded-full px-2 py-1 text-left transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky ${activeLayer === i ? "text-white" : "text-white/70"}`}
+                >
+                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-sky text-[10px] font-bold text-white">{i + 1}</span>
+                  {l.short}
+                </button>
               </li>
             ))}
           </ol>

@@ -104,7 +104,7 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
       </div>
       <div className={`mx-auto mt-14 flex max-w-7xl flex-wrap justify-between gap-4 border-t pt-6 text-xs ${dark ? "border-white/10" : "border-black/10"} ${muted}`}>
         <p>© {new Date().getFullYear()} Art Colchões · Brusque/SC</p>
-        <p>Desenvolvido por eve</p>
+        <a href="https://evecompany.com.br" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">Desenvolvido por eve</a>
       </div>
     </footer>
   );

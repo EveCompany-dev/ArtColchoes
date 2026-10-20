@@ -35,7 +35,7 @@ export const mainNav: NavItem[] = [
 export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="bg-night text-white">
-      <Header heroTone="light" barTone="dark" accent={BLUE} items={mainNav} homeHref={routes.home} />
+      <Header heroTone="light" barTone="dark" accent={BLUE} items={mainNav.filter((item) => item.href !== routes.showroom)} homeHref={routes.home} />
       <Smooth>
         <main>{children}</main>
         <Footer theme="dark" links={[{ href: routes.home, label: "Início" }, ...mainNav]} />

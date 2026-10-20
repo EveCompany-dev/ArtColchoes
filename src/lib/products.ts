@@ -169,11 +169,4 @@ export const techHighlights = [
     metric: "3",
     metricLabel: "zonas de suporte",
   },
-  {
-    name: "Copper System",
-    kicker: "Tecido com cobre",
-    text: "Reflete o calor, dissipa a transpiração e tem ação antibacteriana e antifúngica natural.",
-    metric: "Cu",
-    metricLabel: "propriedades naturais",
-  },
 ];

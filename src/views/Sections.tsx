@@ -4,14 +4,13 @@ import { useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useScrollAnim } from "@/components/Smooth";
 import Icon, { WhatsAppGlyph } from "@/components/Icon";
-import ShowroomVideo from "@/components/ShowroomVideo";
 import ProductGrid from "@/components/ProductGrid";
 import FirmnessGuide from "@/components/FirmnessGuide";
 import Faq from "@/components/Faq";
 import InstagramGrid from "@/components/InstagramGrid";
 import { CityList, ContactInfo } from "@/components/Contact";
 import { brands, categories, categoryPhotos, differentials, photos, stats, whatsappLink } from "@/lib/site";
-import { BLUE, Kicker, routes, useTitleReveal } from "./ui";
+import { BLUE, Kicker, useTitleReveal } from "./ui";
 
 export function BrandMarquee() {
   const root = useRef<HTMLElement>(null);
@@ -37,7 +36,11 @@ export function BrandMarquee() {
             {row.map((b, i) => (
               <span key={i} className="flex items-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={b.logo} alt={k === 0 && i < brands.length ? b.name : ""} className="mx-10 h-9 w-auto opacity-80 brightness-0 invert sm:mx-14 sm:h-12" />
+                <img
+                  src={b.logo}
+                  alt={k === 0 && i < brands.length ? b.name : ""}
+                  className={`mx-10 h-9 w-auto opacity-90 sm:mx-14 sm:h-12 ${b.name === "Mannes" ? "rounded bg-white px-2 py-1" : ""}`}
+                />
                 <span className="size-1.5 rounded-full bg-sky" />
               </span>
             ))}
@@ -101,11 +104,32 @@ export function Differentials() {
 export function Ambientes() {
   const root = useRef<HTMLElement>(null);
   useTitleReveal(root);
-  useScrollAnim(() => {
-    gsap.utils.toArray<HTMLElement>(".amb-img").forEach((el) => {
-      gsap.fromTo(el, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 1.4, ease: "expo.inOut", scrollTrigger: { trigger: el, start: "top 85%" } });
-    });
-  }, root);
+  const galleryImages: [string, string][] = [
+    [photos.showroomSm, "Colchões expostos no showroom"],
+    [photos.cureSm, "Pikolin Cure no showroom"],
+    [photos.blackSignatureSm, "Pikolin Black Signature"],
+    [photos.ambienteBox, "Ambiente com base box e cabeceira ripada"],
+    [photos.camaEstofada, "Cama estofada"],
+    [photos.baseBau, "Base baú exposta no showroom"],
+    [photos.blackSignatureDetalhe, "Detalhe do Pikolin Black Signature"],
+    [photos.espacoHerval, "Espaço Herval"],
+    [photos.camaBanho, "Espaço de cama & banho"],
+  ];
+  const galleryCard = ([src, alt]: [string, string], index: number) => (
+    <figure key={src} className="amb-img relative mb-3 overflow-hidden rounded-2xl sm:mb-5 sm:rounded-3xl">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} loading="lazy" className={`w-full object-cover ${["aspect-[3/4]", "aspect-[5/4]", "aspect-[4/5]"][index % 3]}`} />
+      <figcaption className="absolute inset-x-2 bottom-2 rounded-lg bg-black/60 px-3 py-2 text-xs font-medium text-white sm:inset-x-3 sm:bottom-3 sm:rounded-xl sm:text-sm">{alt}</figcaption>
+    </figure>
+  );
+  const mobileGalleryCard = ([src, alt]: [string, string]) => (
+    <figure key={src} className="amb-img relative mb-4 overflow-hidden rounded-2xl bg-[#0b1428]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} loading="lazy" className="block h-auto w-full object-contain" />
+      <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 pb-3 pt-8 text-xs font-medium text-white">{alt}</figcaption>
+    </figure>
+  );
+
   return (
     <section ref={root} className="overflow-hidden bg-night-2 px-5 py-24 sm:px-8 sm:py-36">
       <div className="mx-auto max-w-7xl">
@@ -116,81 +140,19 @@ export function Ambientes() {
           </div>
           <p className="max-w-md text-white/60 lg:justify-self-end">Cabeceiras, bases e colchões combinados como na sua casa. Venha deitar, comparar e sentir a diferença entre as tecnologias.</p>
         </div>
-        <div className="mt-16 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          <div className="amb-img relative col-span-2 row-span-2 overflow-hidden rounded-3xl lg:col-span-1" data-speed="0.95">
-            <ShowroomVideo className="aspect-[9/16]" />
-            <span className="absolute top-4 left-4 flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-xs backdrop-blur">
-              <span className="size-2 animate-pulse rounded-full bg-red-500" /> Tour pelo showroom
-            </span>
-          </div>
-          {[
-            [photos.showroomSm, "Colchões expostos no showroom"],
-            [photos.ambienteBox, "Ambiente com base box e cabeceira ripada"],
-            [photos.blackSignatureDetalhe, "Pikolin Black Signature Medium"],
-            [photos.camaBanho, "Espaço de cama & banho"],
-            [photos.baseBau, "Base baú exposta no showroom"],
-            [photos.espacoHerval, "Espaço Herval"],
-          ].map(([src, alt], i) => (
-            <figure key={src} className="amb-img relative overflow-hidden rounded-3xl" data-speed={i % 2 ? "1.05" : "0.98"}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={alt} loading="lazy" className="aspect-[3/4] w-full object-cover" />
-              <figcaption className="absolute inset-x-3 bottom-3 rounded-xl bg-black/45 px-3 py-2 text-xs backdrop-blur">{alt}</figcaption>
-            </figure>
+        <div className="mt-12 grid grid-cols-2 items-start gap-x-3 sm:hidden">
+          {[0, 1].map((column) => (
+            <div key={column} className="flex flex-col">
+              {galleryImages.filter((_, index) => index % 2 === column).map(mobileGalleryCard)}
+            </div>
           ))}
-          <div className="flex flex-col justify-end rounded-3xl bg-sky p-6">
-            <p className="font-display text-5xl">25+</p>
-            <p className="mt-2 text-sm text-white/85">colchões expostos para testar sem pressa.</p>
-          </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-export function Explore() {
-  const root = useRef<HTMLElement>(null);
-  useTitleReveal(root);
-  useScrollAnim(() => {
-    gsap.from(".ex-card", { y: 60, opacity: 0, stagger: 0.1, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".ex-card", start: "top 85%" } });
-  }, root);
-  const cards = [
-    { href: routes.produtos, kicker: "Catálogo", title: "Produtos", text: "Colchões, bases box e baú, cabeceiras, travesseiros e cama & banho.", img: photos.blackSignatureSm },
-    { href: routes.tecnologia, kicker: "Por dentro do colchão", title: "Tecnologia", text: "Molas ensacadas, Normablock e Copper System, camada por camada.", img: photos.cureSm },
-  ];
-  return (
-    <section ref={root} className="bg-night px-5 py-24 sm:px-8 sm:py-32">
-      <div className="mx-auto max-w-7xl">
-        <Kicker>Explore</Kicker>
-        <h2 className="reveal-title font-display mt-5 max-w-3xl text-3xl leading-tight sm:text-5xl">Conheça antes de vir.</h2>
-        <div className="mt-14 grid gap-5 lg:grid-cols-[1fr_1fr_0.8fr]">
-          {cards.map((c) => (
-            <a key={c.href} href={c.href} className="ex-card group relative flex min-h-[420px] flex-col justify-end overflow-hidden rounded-[2rem] p-8 ring-1 ring-white/10 sm:min-h-[520px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={c.img} alt="" loading="lazy" className="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105" />
-              <span className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/5" />
-              <span className="relative">
-                <span className="text-xs font-semibold tracking-[0.3em] text-glow uppercase">{c.kicker}</span>
-                <span className="font-display mt-3 block text-3xl sm:text-4xl">{c.title}</span>
-                <span className="mt-3 block max-w-sm text-white/70">{c.text}</span>
-                <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-night transition group-hover:bg-sky group-hover:text-white">
-                  Ver página <Icon name="arrow" className="size-4" />
-                </span>
-              </span>
-            </a>
+        <div className="amb-gallery mt-16 hidden grid-cols-3 gap-5 sm:grid">
+          {[0, 1, 2].map((column) => (
+            <div key={column} className={`flex flex-col ${column === 1 ? "pt-20" : column === 2 ? "pt-10" : ""}`}>
+              {galleryImages.filter((_, index) => index % 3 === column).map((image, row) => galleryCard(image, row + column))}
+            </div>
           ))}
-          <a href={routes.duvidas} className="ex-card group flex flex-col justify-between rounded-[2rem] bg-gradient-to-br from-night-3 to-night-2 p-8 ring-1 ring-white/10 transition hover:ring-sky/50">
-            <span className="grid size-16 place-items-center rounded-full bg-sky/15 text-glow ring-1 ring-sky/30">
-              <Icon name="moon" className="size-7" />
-            </span>
-            <span>
-              <span className="text-xs font-semibold tracking-[0.3em] text-glow uppercase">Antes de comprar</span>
-              <span className="font-display mt-3 block text-3xl">Dúvidas frequentes</span>
-              <span className="mt-3 block text-white/60">Garantia, entrega, pagamento e como escolher a firmeza certa.</span>
-              <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-glow group-hover:text-white">
-                Ver respostas <Icon name="arrow" className="size-4 transition group-hover:translate-x-1" />
-              </span>
-            </span>
-          </a>
         </div>
       </div>
     </section>
@@ -313,7 +275,7 @@ export function Categories() {
           <p className="mt-10 flex items-center gap-2 text-sm text-white/45">Continue rolando <Icon name="arrow" className="size-4" /></p>
         </div>
         {categories.map((c, i) => (
-          <article key={c.slug} className="cat-panel relative flex w-[82vw] shrink-0 flex-col justify-between overflow-hidden border-l border-white/5 bg-night p-8 sm:w-[46vw] sm:p-12 lg:w-[34vw]">
+          <article key={c.slug} className="cat-panel relative flex w-[82vw] shrink-0 flex-col justify-between overflow-hidden bg-night p-8 sm:w-[46vw] sm:p-12 lg:w-[34vw]">
             <div className="absolute inset-0 overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={categoryPhotos[c.slug]} alt={`${c.name} no showroom da Art Colchões`} loading="lazy" className="cat-art size-full object-cover" />
@@ -381,16 +343,23 @@ export function Guide() {
 export function FaqSection() {
   const root = useRef<HTMLElement>(null);
   useTitleReveal(root);
+  useScrollAnim(() => {
+    gsap.matchMedia().add("(min-width: 1024px)", () => {
+      ScrollTrigger.create({ trigger: ".faq-questions", start: "top 120px", end: "bottom top", pin: ".faq-side", pinSpacing: false });
+    });
+  }, root);
   return (
     <section ref={root} className="bg-night px-5 pb-8 sm:px-8">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.6fr]">
-        <div>
+      <div className="faq-grid mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.6fr]">
+        <div className="faq-side self-start">
           <p className="text-white/60">Não achou sua dúvida? Chame no WhatsApp, respondemos rapidinho.</p>
           <a href={whatsappLink("Olá! Tenho uma dúvida sobre os colchões.")} target="_blank" rel="noopener" className="mt-6 inline-flex items-center gap-2 rounded-full bg-sky px-6 py-3.5 text-sm font-semibold transition hover:bg-white hover:text-night">
             <WhatsAppGlyph className="size-4" /> Perguntar no WhatsApp
           </a>
         </div>
-        <Faq theme="dark" />
+        <div className="faq-questions">
+          <Faq theme="dark" />
+        </div>
       </div>
     </section>
   );
