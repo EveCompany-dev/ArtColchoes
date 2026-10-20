@@ -22,18 +22,15 @@ export const routes = {
 };
 
 export const nav: NavItem[] = [
-  { href: routes.showroom, label: "Showroom" },
   { href: routes.produtos, label: "Produtos" },
   { href: routes.tecnologia, label: "Tecnologia" },
-  { href: routes.sobre, label: "Sobre" },
   { href: routes.duvidas, label: "Dúvidas" },
-  { href: routes.contato, label: "Contato" },
 ];
 
 export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="bg-night text-white">
-      <Header heroTone="light" barTone="dark" accent={BLUE} items={nav.filter((item) => item.href !== routes.showroom)} homeHref={routes.home} />
+      <Header heroTone="light" barTone="dark" accent={BLUE} items={nav} homeHref={routes.home} />
       <Smooth>
         <main>{children}</main>
         <Footer theme="dark" links={[{ href: routes.home, label: "Início" }, ...nav]} />
@@ -91,14 +88,16 @@ export function PageIntro({ kicker, title, text, crumb }: { kicker: string; titl
 
 export function CtaBand({ title, text, message, secondary }: { title: string; text: string; message?: string; secondary?: { href: string; label: string } }) {
   const root = useRef<HTMLElement>(null);
-  useTitleReveal(root);
+  useScrollAnim(() => {
+    gsap.from(".cta-title", { y: 24, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".cta-title", start: "top 85%" } });
+  }, root);
   return (
     <section ref={root} className="bg-night px-5 py-24 sm:px-8 sm:py-32">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-night-3 to-night-2 p-8 ring-1 ring-white/10 sm:p-14">
         <span aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-sky/20 blur-3xl" />
-        <div className="relative grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end">
           <div>
-            <h2 className="reveal-title font-display text-3xl leading-tight sm:text-5xl">{title}</h2>
+            <h2 className="cta-title font-display text-3xl leading-tight sm:text-5xl lg:whitespace-nowrap">{title}</h2>
             <p className="mt-5 max-w-xl text-lg text-white/60">{text}</p>
           </div>
           <div className="flex flex-wrap gap-3 lg:justify-end">

@@ -99,13 +99,27 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
   const muted = dark ? "text-white/70" : "text-black/65";
   return (
     <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"} px-5 pt-12 pb-24 sm:px-8 sm:pt-16`}>
-      <div className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-5" : "md:grid-cols-4"}`}>
-        <div className={links ? "sm:col-span-2" : "md:col-span-2"}>
+      <div className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-4" : "md:grid-cols-3"}`}>
+        <div className={links ? "sm:col-span-2 md:col-span-1" : ""}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={dark ? "/img/logo-light.png" : "/img/logo-dark.png"} alt="Art Colchões" className="h-12 w-auto" loading="lazy" />
-          <p className={`mt-5 max-w-sm text-sm leading-relaxed ${muted}`}>
+          <img src={dark ? "/img/logo-light.png" : "/img/logo-dark.png"} alt="Art Colchões" className="mx-auto h-12 w-auto" loading="lazy" />
+          <p className={`mt-5 max-w-sm text-center text-sm leading-relaxed ${muted}`}>
             Loja direto de fábrica de colchões, bases, cabeceiras e cama & banho em Brusque/SC. O maior showroom da região.
           </p>
+          <div className="mt-4 flex justify-around" aria-label="Redes sociais e localização">
+            <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" aria-label="Instagram da Art Colchões" className={`grid size-11 place-items-center rounded-full ring-1 transition ${dark ? "ring-white/20 hover:bg-white/10" : "ring-black/15 hover:bg-black/5"}`}>
+              <Icon name="instagram" className="size-5" />
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61552794909918&ref=PROFILE_EDIT_xav_ig_profile_page_web" target="_blank" rel="noopener noreferrer" aria-label="Facebook da Art Colchões" className={`grid size-11 place-items-center rounded-full ring-1 transition ${dark ? "ring-white/20 hover:bg-white/10" : "ring-black/15 hover:bg-black/5"}`}>
+              <Icon name="facebook" className="size-5" />
+            </a>
+            <a href="https://maps.app.goo.gl/cNv48PMvbLV6Wtcw7" target="_blank" rel="noopener noreferrer" aria-label="Localização da Art Colchões no Google Maps" className={`grid size-11 place-items-center rounded-full ring-1 transition ${dark ? "ring-white/20 hover:bg-white/10" : "ring-black/15 hover:bg-black/5"}`}>
+              <Icon name="pin" className="size-5" />
+            </a>
+            <a href="https://api.whatsapp.com/send/?phone=5547999007120&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp da Art Colchões" className={`grid size-11 place-items-center rounded-full ring-1 transition ${dark ? "ring-white/20 hover:bg-white/10" : "ring-black/15 hover:bg-black/5"}`}>
+              <WhatsAppGlyph className="size-5" />
+            </a>
+          </div>
         </div>
         {links && (
           <nav className="text-sm" aria-label="Rodapé">
@@ -118,11 +132,6 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
           </nav>
         )}
         <div className="text-sm">
-          <p className="font-semibold">Visite</p>
-          <p className={`mt-3 ${muted}`}>{site.address.full}</p>
-          <p className={`mt-2 ${muted}`}>Seg a sex 9h às 18h<br />Sáb 9h às 13h</p>
-        </div>
-        <div className="text-sm">
           <p className="font-semibold">Fale com a gente</p>
           <ul className={`mt-2 ${muted}`}>
             <li><a href={whatsappLink()} target="_blank" rel="noopener" className="touch-link break-words hover:underline">WhatsApp: {site.phone}</a></li>
@@ -130,6 +139,11 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
             <li><a href={`mailto:${site.email}`} className="touch-link break-all hover:underline">{site.email}</a></li>
             <li><a href={site.instagram.url} target="_blank" rel="noopener" className="touch-link break-all hover:underline">{site.instagram.handle}</a></li>
           </ul>
+        </div>
+        <div className="text-sm">
+          <p className="font-semibold">Visite</p>
+          <p className={`mt-3 ${muted}`}>{site.address.full}</p>
+          <p className={`mt-2 ${muted}`}>Seg a sex 9h às 18h<br />Sáb 9h às 13h</p>
         </div>
       </div>
       <div className={`mx-auto mt-14 flex max-w-7xl flex-wrap justify-between gap-4 border-t pt-6 text-xs ${dark ? "border-white/10" : "border-black/10"} ${muted}`}>

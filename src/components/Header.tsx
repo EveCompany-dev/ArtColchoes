@@ -13,8 +13,6 @@ const telHref = `tel:+${site.whatsapp}`;
 export const nav: NavItem[] = [
   { href: "#tecnologia", label: "Tecnologia" },
   { href: "#produtos", label: "Produtos" },
-  { href: "#sobre", label: "Sobre" },
-  { href: "#contato", label: "Contato" },
 ];
 
 type Props = {
