@@ -55,10 +55,14 @@ export default function Smooth({ children, smooth = 1.2 }: { children: ReactNode
       document.addEventListener("click", onClick);
 
       // Smoother só em desktop com mouse; touch/telas < 1024px usam scroll nativo.
+      // As duas condições são complementares: o matchMedia só chama a função quando alguma
+      // delas bate, e sem `native` o celular nunca sinalizava pronto (nenhuma animação rodava).
+      const smoothQuery = "(min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
       const mm = gsap.matchMedia();
       mm.add(
         {
-          smooth: "(min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+          smooth: smoothQuery,
+          native: `not all and ${smoothQuery}`,
         },
         (ctx) => {
           if (ctx.conditions?.smooth) {

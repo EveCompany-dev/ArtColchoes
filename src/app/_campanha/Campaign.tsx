@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, SplitText, useGSAP } from "@/lib/gsap";
-import { campaign } from "@/lib/campaign";
+import { brl, campaign } from "@/lib/campaign";
 import { products } from "@/lib/products";
 import { site, whatsappLink } from "@/lib/site";
 import { ProductCard } from "@/components/ProductGrid";
@@ -109,6 +109,7 @@ export default function Campaign() {
         .from(".cp-in", { y: 30, opacity: 0, stagger: 0.08, duration: 0.9 }, 0.5)
         .from(".cd-cell", { y: 40, opacity: 0, stagger: 0.06, duration: 0.8 }, 0.7);
       gsap.to(".cp-orb", { x: "random(-60, 60)", y: "random(-40, 40)", duration: 6, ease: "sine.inOut", repeat: -1, repeatRefresh: true, yoyo: true });
+      gsap.from(".cp-offer", { y: 60, opacity: 0, stagger: 0.08, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".cp-offers", start: "top 85%" } });
       gsap.from(".cp-card", { y: 80, opacity: 0, stagger: 0.1, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".cp-grid", start: "top 85%" } });
       return () => split.revert();
     },
@@ -144,6 +145,14 @@ export default function Campaign() {
           <div className="mt-10">
             <Countdown now={now} phase={phase} />
           </div>
+          <dl className="cp-in mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+            {campaign.hours.map((h) => (
+              <div key={h.day} className="flex gap-2">
+                <dt className="text-white/50">{h.day}</dt>
+                <dd className="font-semibold">{h.time}</dd>
+              </div>
+            ))}
+          </dl>
           <ul className="cp-in mt-10 flex flex-wrap gap-2">
             {campaign.perks.map((p) => (
               <li key={p} className="rounded-full bg-white/5 px-4 py-2 text-sm ring-1 ring-white/10">{p}</li>
@@ -152,6 +161,46 @@ export default function Campaign() {
           <a href={whatsappLink(msg)} target="_blank" rel="noopener" className="cp-in mt-10 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-4 font-semibold transition hover:brightness-110">
             <WhatsAppGlyph className="size-5" /> {main}
           </a>
+        </div>
+      </section>
+
+      <section className="bg-[#f5f2ec] px-5 pt-24 text-[#0b1630] sm:px-8">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-xs font-semibold tracking-[0.3em] text-[#c4703a] uppercase">Ofertas da {campaign.name}</p>
+          <h2 className="font-display mt-4 text-3xl sm:text-5xl">Preço de fábrica, só neste fim de semana.</h2>
+          {campaign.preview && (
+            <p className="mt-6 inline-block rounded-xl bg-[#c4703a]/10 px-4 py-3 text-sm text-[#8a4a22] ring-1 ring-[#c4703a]/30">
+              Ofertas de exemplo, baseadas no Mês do Cliente. Os valores reais da {campaign.name} ainda serão confirmados pela loja.
+            </p>
+          )}
+          <ul className="cp-offers mt-12 grid gap-5 sm:grid-cols-2">
+            {campaign.offers.map((o) => (
+              <li key={o.title} className="cp-offer flex flex-col rounded-3xl bg-white p-7 ring-1 ring-black/5">
+                <span className="self-start rounded-full bg-[#c4703a] px-3 py-1 text-xs font-bold tracking-wider text-white uppercase">
+                  {brl(o.from - o.to)} de desconto
+                </span>
+                <h3 className="font-display mt-5 text-xl">{o.title}</h3>
+                <p className="mt-1 text-sm text-black/50">
+                  {o.size} cm{o.note && ` · ${o.note}`}
+                </p>
+                <p className="mt-6 text-sm text-black/45">
+                  De <s>{brl(o.from)}</s> por
+                </p>
+                <p className="font-display text-4xl text-[#0b1630] sm:text-5xl">{brl(o.to)}</p>
+                <p className="mt-1 text-sm text-black/55">
+                  ou {campaign.installments}x de {brl(o.to / campaign.installments)} sem juros
+                </p>
+                <a
+                  href={whatsappLink(`Olá! Tenho interesse na oferta da ${campaign.title}: ${o.title} ${o.size} por ${brl(o.to)}.`)}
+                  target="_blank"
+                  rel="noopener"
+                  className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[#0b1630] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#16244a]"
+                >
+                  <WhatsAppGlyph className="size-4" /> Quero esta oferta
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -167,7 +216,7 @@ export default function Campaign() {
             ))}
           </div>
           <p className="mt-10 flex items-center gap-2 text-sm text-black/65">
-            <Icon name="pin" className="size-4" /> {site.address.full} · Seg a sex 9h às 18h · Sáb 9h às 13h
+            <Icon name="pin" className="size-4" /> {site.address.full} · {campaign.hours.map((h) => `${h.day} ${h.time}`).join(" · ")}
           </p>
         </div>
       </section>

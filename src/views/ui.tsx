@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef, type ReactNode } from "react";
 import { gsap, SplitText } from "@/lib/gsap";
@@ -33,7 +33,7 @@ export const nav: NavItem[] = [
 export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="bg-night text-white">
-      <Header heroTone="light" barTone="dark" accent={BLUE} items={nav} homeHref={routes.home} />
+      <Header heroTone="light" barTone="dark" accent={BLUE} items={nav.filter((item) => item.href !== routes.showroom)} homeHref={routes.home} />
       <Smooth>
         <main>{children}</main>
         <Footer theme="dark" links={[{ href: routes.home, label: "Início" }, ...nav]} />
@@ -93,8 +93,8 @@ export function CtaBand({ title, text, message, secondary }: { title: string; te
   const root = useRef<HTMLElement>(null);
   useTitleReveal(root);
   return (
-    <section ref={root} className="bg-night px-5 py-16 sm:px-8 sm:py-32">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-night-3 to-night-2 p-6 ring-1 ring-white/10 sm:p-14">
+    <section ref={root} className="bg-night px-5 py-24 sm:px-8 sm:py-32">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-night-3 to-night-2 p-8 ring-1 ring-white/10 sm:p-14">
         <span aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-sky/20 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
@@ -116,4 +116,3 @@ export function CtaBand({ title, text, message, secondary }: { title: string; te
     </section>
   );
 }
-

@@ -21,6 +21,12 @@ const available: Record<string, Meta> = {
   "showroom-cure": { widths: [480, 720, 960], ratio: 1280 / 960 },
   "showroom-dense": { widths: [480, 720, 960], ratio: 1173 / 960 },
   "showroom-hibrido": { widths: [480, 720, 1440], ratio: 1920 / 1440 },
+  // fotos de produto (scripts/prepare-catalog.mjs): os cards nunca passam de ~450px, 720 cobre tela 2x
+  "produto-bless": { widths: [480, 720], ratio: 1014 / 1352 },
+  "produto-bold": { widths: [480, 720], ratio: 1080 / 1440 },
+  "produto-mind": { widths: [480, 720], ratio: 1024 / 1365 },
+  "produto-nova-york": { widths: [480, 720], ratio: 715 / 1240 },
+  "produto-signature-medium": { widths: [480, 720], ratio: 1055 / 1406 },
 };
 
 export type ImgProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "width" | "height" | "alt"> & {

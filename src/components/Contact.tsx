@@ -98,8 +98,8 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
   const dark = theme === "dark";
   const muted = dark ? "text-white/70" : "text-black/65";
   return (
-    <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"}     px-5 pt-12 pb-24 sm:px-8 sm:pt-16`}>
-          <div className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-5" : "md:grid-cols-4"}`}>
+    <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"} px-5 pt-12 pb-24 sm:px-8 sm:pt-16`}>
+      <div className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-5" : "md:grid-cols-4"}`}>
         <div className={links ? "sm:col-span-2" : "md:col-span-2"}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={dark ? "/img/logo-light.png" : "/img/logo-dark.png"} alt="Art Colchões" className="h-12 w-auto" loading="lazy" />
@@ -112,7 +112,7 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
             <p className="font-semibold">Navegue</p>
             <ul className={`mt-2 ${muted}`}>
               {links.map((l) => (
-                            <li key={l.href}><a href={l.href} className="touch-link hover:underline">{l.label}</a></li>
+                <li key={l.href}><a href={l.href} className="touch-link hover:underline">{l.label}</a></li>
               ))}
             </ul>
           </nav>
@@ -134,7 +134,7 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
       </div>
       <div className={`mx-auto mt-14 flex max-w-7xl flex-wrap justify-between gap-4 border-t pt-6 text-xs ${dark ? "border-white/10" : "border-black/10"} ${muted}`}>
         <p>© {new Date().getFullYear()} Art Colchões · Brusque/SC</p>
-        <p>Desenvolvido por eve</p>
+        <a href="https://evecompany.com.br" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">Desenvolvido por eve</a>
       </div>
     </footer>
   );
