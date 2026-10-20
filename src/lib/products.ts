@@ -1,6 +1,7 @@
 // Colchões expostos na loja (lista enviada pelo cliente em 23/09/2026).
-// Especificações: sites oficiais pikolin.com.br e mannes.com.br.
-// Black Signature e Nova York não têm ficha técnica pública completa: campos "Consultar".
+// Especificações: sites oficiais pikolin.com.br e mannes.com.br e lâminas de catálogo
+// enviadas pela loja (assets-cliente/catalogo). Nova York não informa firmeza: "Consultar".
+// Fotos "produto-*": recortes das lâminas, gerados por scripts/prepare-catalog.mjs.
 
 export type Firmness = "Extra Plush" | "Plush" | "Medium" | "Firm" | "Extra Firm";
 
@@ -38,11 +39,11 @@ export const firmnessLabel: Record<Firmness, string> = {
 export const products: Product[] = [
   // ---------------- Pikolin ----------------
   {
-    slug: "black-signature", name: "Black Signature", brand: "Pikolin", line: "Black Signature Collection", category: "colchoes",
-    firmness: "Medium",
-    techs: ["Pillow top", "Coleção premium"],
+    slug: "black-signature", name: "Black Signature Medium", brand: "Pikolin", line: "Black Signature Collection", category: "colchoes",
+    height: 30, firmness: "Medium", spring: "Cross System", support: "250kg",
+    techs: ["Pillow top", "Reactive", "Cool Touch", "High Support", "Health Protection", "Air Flow Support"],
     tagline: "A coleção mais exclusiva da Pikolin no showroom", sizes, warranty: "Consultar",
-    photo: "/img/black-signature-720.webp", tone: { top: "#2a2f3a", side: "#1c2340" },
+    photo: "/img/produto-signature-medium-720.webp", tone: { top: "#2a2f3a", side: "#1c2340" },
   },
   {
     slug: "cure", name: "Cure", brand: "Pikolin", line: "Copper System", category: "colchoes",
@@ -63,7 +64,7 @@ export const products: Product[] = [
     height: 31, firmness: "Firm", spring: "Cross System", support: "250kg",
     techs: ["Copper Fabric", "Cool Touch", "High Support", "Air Flow Support"],
     tagline: "Estabilidade e firmeza com conforto e suporte", sizes, warranty: "Consultar",
-    tone: { top: "#f2ede5", side: "#b8885f" },
+    photo: "/img/produto-bold-720.webp", tone: { top: "#f2ede5", side: "#b8885f" },
   },
   {
     slug: "balance", name: "Balance", brand: "Pikolin", line: "Flow System", category: "colchoes",
@@ -82,7 +83,7 @@ export const products: Product[] = [
   {
     slug: "activeness", name: "Activeness", brand: "Pikolin", line: "Health System", category: "colchoes",
     height: 30, firmness: "Firm", spring: "Normablock® Pro", support: "250kg",
-    techs: ["Cool Touch", "Suporte lombar reforçado"],
+    techs: ["Normablock® Pro 250kg", "Tri Zone Support", "Purotex® probióticos", "Cool Touch"],
     tagline: "Para quem acorda com energia", sizes, warranty: "Consultar",
     tone: { top: "#eef0f2", side: "#56627a" },
   },
@@ -96,24 +97,24 @@ export const products: Product[] = [
   },
   {
     slug: "bless", name: "Bless", brand: "Mannes", line: "Molas Ensacadas", category: "colchoes",
-    height: 30, firmness: "Firm", spring: "Molas ensacadas", support: "150kg",
-    techs: ["Gel Sense", "High Support", "Health Protection antiácaro", "Air Flow Support"],
+    height: 30, firmness: "Firm", spring: "Molas ensacadas 18cm", support: "150kg",
+    techs: ["Malha Viscose", "Gel Sense", "High Support", "Health Protection antiácaro", "Air Flow Support"],
     tagline: "O toque supremo de firmeza para o seu sono", sizes, warranty: "Consultar",
-    tone: { top: "#f4f2ee", side: "#a8a397" },
+    photo: "/img/produto-bless-720.webp", tone: { top: "#f4f2ee", side: "#a8a397" },
   },
   {
     slug: "mind", name: "Mind", brand: "Mannes", line: "Molas Ensacadas", category: "colchoes",
-    height: 25, firmness: "Firm", spring: "Molas ensacadas", support: "150kg",
-    techs: ["Gel Sense", "Ultra High Support", "Air Flow Support"],
+    height: 25, firmness: "Firm", spring: "Molas ensacadas 18cm", support: "150kg",
+    techs: ["Malha Soft", "Gel Sense", "Ultra High Support", "Health Protection", "Air Flow Support"],
     tagline: "Planejado para um conforto estável", sizes, warranty: "Consultar",
-    tone: { top: "#f1f1ef", side: "#7d8694" },
+    photo: "/img/produto-mind-720.webp", tone: { top: "#f1f1ef", side: "#7d8694" },
   },
   {
-    slug: "nova-york", name: "Nova York", brand: "Mannes", line: "Linha Sky Light", category: "colchoes",
-    height: 32, spring: "Mola Ensacada Sky",
-    techs: ["Health Protection", "Air Flow Support", "Lateral em suede"],
+    slug: "nova-york", name: "Nova York", brand: "Mannes", line: "Linha Sky", category: "colchoes",
+    height: 32, spring: "Molas ensacadas 18cm", support: "120kg",
+    techs: ["Lateral em suede", "Health Protection", "Air Flow Support", "Homologado"],
     tagline: "Conforto e sofisticação da linha Sky", sizes, warranty: "Consultar",
-    tone: { top: "#f3f0ea", side: "#3a4660" },
+    photo: "/img/produto-nova-york-720.webp", tone: { top: "#f3f0ea", side: "#3a4660" },
   },
 ];
 
@@ -167,12 +168,5 @@ export const techHighlights = [
     text: "Molas em Z com zona central reforçada e fio contínuo com tratamento térmico. Mais durabilidade e firmeza lombar.",
     metric: "3",
     metricLabel: "zonas de suporte",
-  },
-  {
-    name: "Copper System",
-    kicker: "Tecido com cobre",
-    text: "Reflete o calor, dissipa a transpiração e tem ação antibacteriana e antifúngica natural.",
-    metric: "Cu",
-    metricLabel: "propriedades naturais",
   },
 ];

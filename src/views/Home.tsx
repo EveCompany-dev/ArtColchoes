@@ -1,7 +1,7 @@
 "use client";
 
 import Hero from "./Hero";
-import { About, Ambientes, BrandMarquee, ContactSection, Differentials, Explore, FinalCta } from "./Sections";
+import { About, Ambientes, BrandMarquee, ContactSection, Differentials, FinalCta } from "./Sections";
 import { Shell } from "./ui";
 
 export default function Home() {
@@ -11,7 +11,6 @@ export default function Home() {
       <BrandMarquee />
       <Differentials />
       <Ambientes />
-      <Explore />
       <About />
       <ContactSection />
       <FinalCta />

@@ -34,15 +34,17 @@ export function TechHighlights() {
   useTitleReveal(root);
   useScrollAnim(() => {
     gsap.utils.toArray<HTMLElement>(".th-card").forEach((card) => {
-      gsap
+      const tl = gsap
         .timeline({ scrollTrigger: { trigger: card, start: "top 80%" } })
-        .from(card, { y: 60, opacity: 0, duration: 0.9, ease: "power3.out" })
-        .from(card.querySelectorAll(".draw"), { drawSVG: "0%", duration: 1.8, stagger: 0.12, ease: "power2.inOut" }, 0.2)
-        .from(card.querySelectorAll(".th-in"), { y: 20, opacity: 0, stagger: 0.08, duration: 0.6 }, 0.6);
+        .from(card, { y: 60, opacity: 0, duration: 0.9, ease: "power3.out" });
+      // o card do cobre não tem ilustração em traço
+      const draws = card.querySelectorAll(".draw");
+      if (draws.length) tl.from(draws, { drawSVG: "0%", duration: 1.8, stagger: 0.12, ease: "power2.inOut" }, 0.2);
+      tl.from(card.querySelectorAll(".th-in"), { y: 20, opacity: 0, stagger: 0.08, duration: 0.6 }, 0.6);
     });
   }, root);
 
-  const [cross, norma, copper] = techHighlights;
+  const [cross, norma] = techHighlights;
   return (
     <section id="tecnologias" ref={root} className="bg-night px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
@@ -65,14 +67,6 @@ export function TechHighlights() {
               <p className="th-in mt-4 leading-relaxed text-white/70">{t.text}</p>
             </article>
           ))}
-        </div>
-        <div className="th-card mt-5 flex flex-col items-start gap-6 rounded-[2rem] bg-gradient-to-r from-[#b8622f]/25 to-transparent p-8 ring-1 ring-[#e0894f]/25 sm:flex-row sm:items-center sm:p-10">
-          <span className="th-in font-display grid size-20 shrink-0 place-items-center rounded-2xl bg-[#c4703a] text-2xl">Cu</span>
-          <div className="th-in">
-            <p className="text-xs font-semibold tracking-widest text-white/65 uppercase">{copper.kicker}</p>
-            <h3 className="font-display mt-2 text-2xl">{copper.name}</h3>
-            <p className="mt-2 max-w-2xl text-white/65">{copper.text}</p>
-          </div>
         </div>
       </div>
     </section>

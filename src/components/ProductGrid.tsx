@@ -16,7 +16,7 @@ export function ProductCard({ p, theme = "light", accent }: { p: Product; theme?
   const firm = p.firmness ? firmnessLabel[p.firmness] : "Consultar";
   const muted = dark ? "text-white/70" : "text-black/65";
   return (
-    <article className={`group flex h-full flex-col overflow-hidden rounded-3xl transition-shadow duration-500 ${dark ? "bg-white/[0.04] ring-1 ring-white/10 hover:bg-white/[0.07]" : "bg-white ring-1 ring-black/5 hover:shadow-2xl hover:shadow-black/10"}`}>
+    <article className={`group flex h-full flex-col overflow-hidden rounded-3xl transition-shadow duration-500 ${dark ? "bg-night-2 ring-1 ring-white/10 hover:bg-[#172440]" : "bg-white ring-1 ring-black/5 hover:shadow-2xl hover:shadow-black/10"}`}>
       <div className="relative aspect-[4/3] overflow-hidden" style={{ background: dark ? "linear-gradient(160deg,#1a2749,#0b1328)" : `linear-gradient(160deg, #f7f5f1, ${p.tone.top})` }}>
         {p.photo ? (
           <Img name={p.photo} alt={`Colchão ${p.brand} ${p.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="size-full object-cover transition duration-700 motion-reduce:transition-none group-hover:scale-105 motion-reduce:group-hover:scale-100" />
@@ -84,7 +84,7 @@ function CompactCard({ p, theme, accent }: { p: Product; theme: Theme; accent: s
   const dark = theme === "dark";
   const firm = p.firmness ? firmnessLabel[p.firmness] : "Consultar";
   return (
-    <article className={`flex h-full flex-col rounded-2xl p-5 ${dark ? "bg-white/[0.04] ring-1 ring-white/10" : "bg-white ring-1 ring-black/5"}`}>
+    <article className={`flex h-full flex-col rounded-2xl p-5 ${dark ? "bg-night-2 ring-1 ring-white/10" : "bg-white ring-1 ring-black/5"}`}>
       <p className={`text-xs font-semibold tracking-wider uppercase ${dark ? "text-white/70" : "text-black/65"}`}>
         {p.brand} · {p.line}
       </p>
@@ -143,7 +143,6 @@ export default function ProductGrid({ theme = "light", accent = "#c4703a", filte
         duration: 0.7,
         ease: "power3.inOut",
         stagger: 0.04,
-        absolute: true,
         onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.2 }),
         onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.85, duration: 0.4 }),
         onComplete: () => ScrollTrigger.refresh(),
