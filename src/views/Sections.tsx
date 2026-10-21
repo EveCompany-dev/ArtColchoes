@@ -114,17 +114,43 @@ export function Differentials() {
 export function Ambientes() {
   const root = useRef<HTMLElement>(null);
   useTitleReveal(root);
-  const galleryImages: [string, string][] = [
-    [photos.showroomSm, "Colchões expostos no showroom"],
-    [photos.cureSm, "Pikolin Cure no showroom"],
-    [photos.blackSignatureSm, "Pikolin Black Signature"],
-    [photos.ambienteBox, "Ambiente com base box e cabeceira ripada"],
-    [photos.camaEstofada, "Cama estofada"],
-    [photos.baseBau, "Base baú exposta no showroom"],
-    [photos.blackSignatureDetalhe, "Detalhe do Pikolin Black Signature"],
-    [photos.espacoHerval, "Espaço Herval"],
-    [photos.camaBanho, "Espaço de cama & banho"],
+  const galleryImages: [string, string, number][] = [
+    [photos.showroomSm, "Colchões expostos no showroom", 1920 / 1440],
+    [photos.cureSm, "Pikolin Cure no showroom", 1280 / 960],
+    [photos.blackSignatureSm, "Pikolin Black Signature", 1280 / 720],
+    [photos.ambienteBox, "Ambiente com base box e cabeceira ripada", 1087 / 720],
+    [photos.camaEstofada, "Cama estofada", 1279 / 720],
+    [photos.baseBau, "Base baú exposta no showroom", 1280 / 720],
+    [photos.blackSignatureDetalhe, "Detalhe do Pikolin Black Signature", 960 / 720],
+    [photos.espacoHerval, "Espaço Herval", 960 / 720],
+    [photos.camaBanho, "Espaço de cama & banho", 960 / 720],
   ];
+  const mobileGalleryHeights = galleryImages.map(([, , ratio]) => ratio + 0.1);
+  let mobileGalleryMask = 0;
+  let closestGalleryHeightDifference = Infinity;
+  for (let mask = 1; mask < (1 << galleryImages.length) - 1; mask++) {
+    const leftHeight = mobileGalleryHeights.reduce((sum, height, index) => sum + ((mask >> index) & 1) * height, 0);
+    const rightHeight = mobileGalleryHeights.reduce((sum, height, index) => sum + (((mask >> index) & 1) ? 0 : height), 0);
+    const difference = Math.abs(leftHeight - rightHeight);
+    if (difference < closestGalleryHeightDifference) {
+      mobileGalleryMask = mask;
+      closestGalleryHeightDifference = difference;
+    }
+  }
+  const mobileGalleryColumns = [0, 1].map((column) =>
+    galleryImages.filter((_, index) => ((mobileGalleryMask >> index) & 1) === column),
+  );
+  const columnPhotoHeights = mobileGalleryColumns.map((column) => column.reduce((sum, [, , ratio]) => sum + ratio, 0));
+  const columnGapCounts = mobileGalleryColumns.map((column) => Math.max(0, column.length - 1));
+  const estimatedColumnHeights = columnPhotoHeights.map((height, index) => height * 200 + columnGapCounts[index] * 16);
+  const shorterColumn = estimatedColumnHeights[0] <= estimatedColumnHeights[1] ? 0 : 1;
+  const longerColumn = 1 - shorterColumn;
+  const shorterColumnGapCount = columnGapCounts[shorterColumn];
+  const photoHeightDifference = columnPhotoHeights[longerColumn] - columnPhotoHeights[shorterColumn];
+  const gapCountDifference = columnGapCounts[longerColumn] - columnGapCounts[shorterColumn];
+  const balancedMobileGap = shorterColumnGapCount > 0
+    ? `calc(${16 + (-photoHeightDifference * 26 + gapCountDifference * 16) / shorterColumnGapCount}px + ${photoHeightDifference * 50 / shorterColumnGapCount}vw)`
+    : "1rem";
   const drag = useRef({ active: false, x: 0, left: 0 });
   const stage = useRef<HTMLDivElement>(null);
   const spans = ["col-span-2 row-span-2", "row-span-2", "row-span-2", "", "", "row-span-2", "", "", "row-span-2"];
@@ -134,8 +160,8 @@ export function Ambientes() {
       <Img name={src} alt={copy > 0 ? "" : alt} sizes="25vw" draggable={false} className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
       <figcaption className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-12 text-sm font-medium text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">{alt}</figcaption>
     </figure>
-  );  const mobileGalleryCard = ([src, alt]: [string, string]) => (
-    <figure key={src} className="amb-img relative mb-4 overflow-hidden rounded-2xl bg-[#0b1428]">
+  );  const mobileGalleryCard = ([src, alt]: (typeof galleryImages)[number]) => (
+    <figure key={src} className="amb-img relative overflow-hidden rounded-2xl bg-[#0b1428]">
       <Img name={src} alt={alt} sizes="50vw" className="block h-auto w-full object-contain" />
       <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 pb-3 pt-8 text-xs font-medium text-white">{alt}</figcaption>
     </figure>
@@ -152,9 +178,9 @@ export function Ambientes() {
           <p className="max-w-md text-white/60 lg:justify-self-end">Cabeceiras, bases e colchões combinados como na sua casa. Venha deitar, comparar e sentir a diferença entre as tecnologias.</p>
         </div>
         <div className="mt-12 grid grid-cols-2 items-start gap-x-3 sm:hidden">
-          {[0, 1].map((column) => (
-            <div key={column} className="flex flex-col">
-              {galleryImages.filter((_, index) => index % 2 === column).map(mobileGalleryCard)}
+          {mobileGalleryColumns.map((images, column) => (
+            <div key={column} className="flex flex-col gap-4" style={column === shorterColumn ? { rowGap: balancedMobileGap } : undefined}>
+              {images.map(mobileGalleryCard)}
             </div>
           ))}
         </div>
@@ -356,13 +382,15 @@ export function Categories() {
               <Img name={categoryPhotos[c.slug]} alt={`${c.name} no showroom da Art Colchões`} sizes="(min-width:1024px) 40vw, 50vw" draggable={false} className="cat-art size-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/10" />
             </div>
-            <span className="cat-num font-display relative text-4xl leading-none text-glow opacity-60 lg:motion-safe:text-[12vw] lg:motion-safe:opacity-40">{String(i + 1).padStart(2, "0")}</span>
-            <div className="relative">
+            <span className="cat-num font-display relative hidden text-4xl leading-none text-glow opacity-60 sm:block lg:motion-safe:text-[12vw] lg:motion-safe:opacity-40">{String(i + 1).padStart(2, "0")}</span>
+            <div className="relative flex flex-1 flex-col justify-between">
               <h3 className="font-display text-lg sm:text-2xl lg:motion-safe:text-4xl">{c.name}</h3>
-              <p className="mt-2 max-w-xs text-xs leading-snug text-white/80 sm:text-sm lg:motion-safe:text-base">{c.text}</p>
+              <p className="mt-2 hidden max-w-xs text-xs leading-snug text-white/80 sm:block sm:text-sm lg:motion-safe:text-base">{c.text}</p>
               {c.slug === "colchoes" ? (
                 <a href="#catalogo" className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-night transition hover:bg-sky hover:text-white sm:px-5">
-                  Ver opções <Icon name="arrow" className="size-4" />
+                  <span className="sm:hidden">saber mais</span>
+                  <span className="hidden sm:inline">Ver opções</span>
+                  <Icon name="arrow" className="size-4" />
                 </a>
               ) : (
                 <a
@@ -371,7 +399,9 @@ export function Categories() {
                   rel="noopener"
                   className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-night transition hover:bg-sky hover:text-white sm:px-5"
                 >
-                  <WhatsAppGlyph className="size-4 shrink-0" /> Pedir fotos e valores
+                  <WhatsAppGlyph className="size-4 shrink-0" />
+                  <span className="sm:hidden">saber mais</span>
+                  <span className="hidden sm:inline">Pedir fotos e valores</span>
                 </a>
               )}
             </div>

@@ -15,7 +15,7 @@ export default function InstagramGrid({ theme = "light" }: { theme?: "light" | "
           <p className={`text-xs font-semibold tracking-[0.2em] uppercase ${dark ? "text-white/70" : "text-black/65"}`}>Instagram</p>
           <p className="font-display mt-2 text-2xl sm:text-3xl">{site.instagram.handle}</p>
         </div>
-        <a href={site.instagram.url} target="_blank" rel="noopener" className={`inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium ring-1 transition ${dark ? "ring-white/20 hover:bg-white hover:text-black" : "ring-black/15 hover:bg-black hover:text-white"}`}>
+        <a href={site.instagram.url} target="_blank" rel="noopener" className={`mx-auto inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium ring-1 transition sm:mx-0 ${dark ? "ring-white/20 hover:bg-white hover:text-black" : "ring-black/15 hover:bg-black hover:text-white"}`}>
           <Icon name="instagram" className="size-4" /> Seguir
         </a>
       </div>
