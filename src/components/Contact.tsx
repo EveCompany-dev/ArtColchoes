@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { cities, site, whatsappLink } from "@/lib/site";
 import Icon, { WhatsAppGlyph } from "./Icon";
 
@@ -97,6 +97,27 @@ export function CityList({ theme = "light" }: { theme?: "light" | "dark" }) {
 export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; links?: { href: string; label: string }[] }) {
   const dark = theme === "dark";
   const muted = dark ? "text-white/70" : "text-black/65";
+  const [confetti, setConfetti] = useState<{ id: number; x: number; y: number; rotation: number; shape: number }[]>([]);
+  const confettiId = useRef(0);
+  const confettiTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (confettiTimeout.current) clearTimeout(confettiTimeout.current);
+  }, []);
+
+  const burstConfetti = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setConfetti(Array.from({ length: 24 }, (_, shape) => ({
+      id: confettiId.current++,
+      x: Math.round((Math.random() - 0.5) * 140),
+      y: Math.round(-50 - Math.random() * 70),
+      rotation: Math.round((Math.random() - 0.5) * 720),
+      shape,
+    })));
+    if (confettiTimeout.current) clearTimeout(confettiTimeout.current);
+    confettiTimeout.current = setTimeout(() => setConfetti([]), 900);
+  };
+
   return (
     <footer className={`${dark ? "bg-[#060b19] text-white" : "bg-cream text-navy"} px-5 pt-12 pb-24 sm:px-8 sm:pt-16`}>
       <div className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${links ? "sm:grid-cols-2 md:grid-cols-4" : "md:grid-cols-3"}`}>
@@ -146,9 +167,31 @@ export function Footer({ theme = "dark", links }: { theme?: "light" | "dark"; li
           <p className={`mt-2 ${muted}`}>Seg a sex 9h às 18h<br />Sáb 9h às 13h</p>
         </div>
       </div>
-      <div className={`mx-auto mt-14 flex max-w-7xl flex-wrap justify-between gap-4 border-t pt-6 text-xs ${dark ? "border-white/10" : "border-black/10"} ${muted}`}>
+      <div className={`mx-auto mt-14 flex max-w-7xl flex-wrap justify-between gap-4 border-t pt-6 text-xs ${dark ? "border-white/10" : "border-black/10"} ${muted} max-sm:flex-col max-sm:items-center max-sm:text-center`}>
         <p>© {new Date().getFullYear()} Art Colchões · Brusque/SC</p>
-        <a href="https://evecompany.com.br" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">Desenvolvido por eve</a>
+        <a href="https://evecompany.com.br" target="_blank" rel="noopener noreferrer" aria-label="Desenvolvido por Eve" className="inline-flex items-center gap-1.5 transition hover:text-white">
+          <span>Desenvolvido por</span>
+          <span className="relative inline-flex">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logos/eve.svg" alt="" onClick={burstConfetti} className="h-4 w-auto" />
+            <span aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-visible">
+              {confetti.map((particle) => (
+                <span
+                  key={particle.id}
+                  className={`eve-confetti ${particle.shape % 3 === 0 ? "rounded-full" : "rounded-[1px]"}`}
+                  style={{
+                    "--confetti-x": `${particle.x}px`,
+                    "--confetti-y": `${particle.y}px`,
+                    "--confetti-rotation": `${particle.rotation}deg`,
+                    left: "50%",
+                    top: "50%",
+                    animationDelay: `${particle.shape * 8}ms`,
+                  } as CSSProperties}
+                />
+              ))}
+            </span>
+          </span>
+        </a>
       </div>
     </footer>
   );

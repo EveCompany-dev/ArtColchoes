@@ -143,7 +143,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-copy relative z-[4] mx-auto w-full px-5 sm:px-8 lg:px-[clamp(2rem,6vw,8rem)]">
-        <div className="flex min-h-[calc(100svh-10rem)] flex-col lg:min-h-0 lg:max-w-[52%]">
+        <div className="flex min-h-[calc(100svh-10rem)] flex-col justify-center lg:min-h-0 lg:max-w-[52%] lg:justify-start">
           <div className="hero-meta">
             <p className="mx-auto mb-5 flex w-fit items-center justify-center gap-2 text-center text-xs font-semibold tracking-[0.16em] text-white/75 uppercase sm:mb-8 sm:inline-flex sm:rounded-full sm:bg-white/5 sm:px-4 sm:py-2 sm:tracking-widest sm:ring-1 sm:ring-white/10 sm:backdrop-blur lg:mx-0 lg:justify-start lg:text-left">
               <Icon name="factory" className="size-4 text-glow" /> Loja direto de fábrica · Brusque/SC
@@ -155,11 +155,11 @@ export default function Hero() {
             <span className="sr-only"> de colchões </span>
             <span className="h1-line block">da região</span>
           </h1>
-          <div className="hero-meta mt-5 flex flex-1 flex-col sm:mt-8 lg:flex-none">
+          <div className="hero-meta mt-5 flex flex-col sm:mt-8">
             <p className="mx-auto max-w-lg text-center text-base leading-relaxed text-white/85 sm:text-lg sm:text-white/65 lg:mx-0 lg:text-left">
               Mais de 25 colchões expostos para você deitar, testar e comparar. Pikolin, Mannes, Herval e D&apos;Angelis, com entrega e montagem grátis em Brusque e região.
             </p>
-            <div className="mt-auto flex w-full justify-center gap-3 pt-8 lg:mt-8 lg:w-auto lg:justify-start lg:pt-0">
+            <div className="flex w-full justify-center gap-3 pt-8 lg:mt-8 lg:w-auto lg:justify-start lg:pt-0">
               <a href={whatsappLink()} target="_blank" rel="noopener" className="inline-flex items-center gap-2 rounded-full bg-sky px-6 py-3.5 font-semibold text-white transition hover:bg-white hover:text-night sm:bg-transparent sm:ring-1 sm:ring-white/20 sm:backdrop-blur sm:hover:bg-white/10 sm:hover:text-white">
                 <WhatsAppGlyph className="size-5" /> Falar com consultor
               </a>

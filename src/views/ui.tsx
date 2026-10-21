@@ -97,10 +97,10 @@ export function CtaBand({ title, text, message, secondary }: { title: string; te
         <span aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-sky/20 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end">
           <div>
-            <h2 className="cta-title font-display text-3xl leading-tight sm:text-5xl lg:whitespace-nowrap">{title}</h2>
-            <p className="mt-5 max-w-xl text-lg text-white/60">{text}</p>
+            <h2 className="cta-title font-display text-center text-3xl leading-tight sm:text-5xl lg:text-left lg:whitespace-nowrap">{title}</h2>
+            <p className="mt-5 max-w-xl text-center text-lg text-white/60 lg:text-left">{text}</p>
           </div>
-          <div className="flex flex-wrap gap-3 lg:justify-end">
+          <div className="flex flex-wrap justify-center gap-3 lg:justify-end">
             <a href={whatsappLink(message)} target="_blank" rel="noopener" className="inline-flex items-center gap-2 rounded-full bg-sky px-6 py-3.5 font-semibold transition hover:bg-white hover:text-night">
               <WhatsAppGlyph className="size-5" /> Falar com consultor
             </a>
