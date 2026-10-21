@@ -108,11 +108,11 @@ export default function Header({
         className={`fixed inset-x-0 top-0 z-40 transition-colors duration-500 ${barBg}`}
       >
         <div
-          className={`mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-8 ${text}`}
+          className={`mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-5 sm:h-20 sm:px-8 ${text}`}
         >
           <a
             href={homeHref}
-            className="hd-item hd-logo z-10 inline-flex min-h-11 items-center"
+            className="hd-item relative z-10 col-start-2 row-start-1 inline-flex min-h-11 items-center justify-self-center lg:col-start-1 lg:justify-self-start"
             aria-label="Art Colchões - início"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -128,7 +128,7 @@ export default function Header({
           </a>
 
           <nav
-            className="hidden items-center gap-8 lg:flex"
+            className="col-start-2 row-start-1 hidden items-center gap-8 lg:flex"
             aria-label="Principal"
           >
             {items.map((n) => {
@@ -147,7 +147,7 @@ export default function Header({
             })}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="col-start-3 row-start-1 flex items-center gap-3 justify-self-end">
             <span className="hd-item hidden sm:block">
               <a
                 href={whatsappLink()}

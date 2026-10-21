@@ -383,7 +383,7 @@ export function Categories() {
               <div className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/10" />
             </div>
             <span className="cat-num font-display relative hidden text-4xl leading-none text-glow opacity-60 sm:block lg:motion-safe:text-[12vw] lg:motion-safe:opacity-40">{String(i + 1).padStart(2, "0")}</span>
-            <div className="relative flex flex-1 flex-col justify-between">
+            <div className="relative max-sm:flex max-sm:flex-1 max-sm:flex-col max-sm:justify-between">
               <h3 className="font-display text-lg sm:text-2xl lg:motion-safe:text-4xl">{c.name}</h3>
               <p className="mt-2 hidden max-w-xs text-xs leading-snug text-white/80 sm:block sm:text-sm lg:motion-safe:text-base">{c.text}</p>
               {c.slug === "colchoes" ? (

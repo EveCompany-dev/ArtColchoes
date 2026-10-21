@@ -27,12 +27,8 @@ function Cta({ p, dark, className = "" }: { p: Product; dark: boolean; className
   );
 }
 
-type Rects = { card: DOMRect; img: DOMRect };
-
-function Expanded({ p, dark, accent, getFrom, onReveal, onClose }: { p: Product; dark: boolean; accent: string; getFrom: () => Rects; onReveal: () => void; onClose: () => void }) {
+function Expanded({ p, dark, accent, onClose }: { p: Product; dark: boolean; accent: string; onClose: () => void }) {
   const panel = useRef<HTMLDivElement>(null);
-  const shell = useRef<HTMLDivElement>(null);
-  const imgCol = useRef<HTMLDivElement>(null);
   const imgBox = useRef<HTMLDivElement>(null);
   const backdrop = useRef<HTMLDivElement>(null);
   const closing = useRef(false);
@@ -41,59 +37,30 @@ function Expanded({ p, dark, accent, getFrom, onReveal, onClose }: { p: Product;
   const muted = dark ? "text-white/70" : "text-black/65";
   const bg = dark ? "bg-night-2 ring-1 ring-white/10" : "bg-white";
 
-  // Caixas (fundo e foto) na posição/tamanho do card, relativas ao layout final. Só animamos
-  // left/top/width/height reais, sem escala, então nada distorce.
-  const cardBoxes = useCallback(() => {
-    const { card, img } = getFrom();
-    const r = panel.current!.getBoundingClientRect();
-    const c = imgCol.current!.getBoundingClientRect();
-    const md = window.matchMedia("(min-width: 768px)").matches;
-    return {
-      shell: { left: card.left - r.left, top: card.top - r.top, width: card.width, height: card.height },
-      shellEnd: { left: 0, top: 0, width: r.width, height: r.height },
-      img: { left: img.left - c.left, top: img.top - c.top, width: img.width, height: img.height, borderRadius: "24px 24px 0 0" },
-      imgEnd: { left: 0, top: 0, width: c.width, height: c.height, borderRadius: md ? "24px 0 0 24px" : "24px 24px 0 0" },
-    };
-  }, [getFrom]);
-
+  // Entrada: fundo escurece, o painel sobe com leve escala e o conteúdo entra em cascata.
   useLayoutEffect(() => {
+    if (reduced()) return;
     const el = panel.current!;
-    if (reduced()) {
-      el.style.overflowY = "auto";
-      return;
-    }
     const ctx = gsap.context(() => {
-      const b = cardBoxes();
-      const content = el.querySelectorAll("[data-x]");
-      gsap.set(content, { opacity: 0, y: 20 });
       gsap
-        .timeline({ defaults: { ease: "expo.inOut" }, onComplete: () => { gsap.set([shell.current, imgBox.current], { clearProps: "left,top,width,height" }); el.style.overflowY = "auto"; } })
-        .fromTo(backdrop.current, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0)
-        .fromTo(shell.current, b.shell, { ...b.shellEnd, duration: 0.8 }, 0)
-        .fromTo(imgBox.current, b.img, { ...b.imgEnd, duration: 0.8 }, 0)
-        .to(content, { opacity: 1, y: 0, duration: 0.55, stagger: 0.06, ease: "power3.out" }, 0.5);
+        .timeline()
+        .fromTo(backdrop.current, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0)
+        .fromTo(el, { opacity: 0, y: 48, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "expo.out" }, 0)
+        .fromTo(imgBox.current!.querySelectorAll("img, svg"), { scale: 1.08 }, { scale: 1, duration: 1.1, ease: "expo.out" }, 0)
+        .fromTo(el.querySelectorAll("[data-x]"), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: "power3.out" }, 0.15);
     });
     return () => ctx.revert();
-  }, [cardBoxes]);
+  }, []);
 
   const close = useCallback(() => {
     if (closing.current) return;
     closing.current = true;
     if (reduced()) return onClose();
-    const el = panel.current!;
-    el.style.overflowY = "visible";
-    el.scrollTop = 0;
-    const b = cardBoxes();
-    gsap.set([shell.current, imgBox.current], { position: "absolute" });
     gsap
-      .timeline({ defaults: { ease: "expo.inOut" }, onComplete: onClose })
-      .to(el.querySelectorAll("[data-x]"), { opacity: 0, y: 12, duration: 0.25, stagger: { each: 0.02, from: "end" }, ease: "power2.in" }, 0)
-      .fromTo(shell.current, b.shellEnd, { ...b.shell, duration: 0.7 }, 0.15)
-      .fromTo(imgBox.current, b.imgEnd, { ...b.img, duration: 0.7 }, 0.15)
-      .to(backdrop.current, { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 0.3)
-      .call(onReveal, undefined, 0.65)
-      .to([shell.current, imgBox.current], { opacity: 0, duration: 0.2, ease: "none" }, 0.65);
-  }, [cardBoxes, onClose, onReveal]);
+      .timeline({ onComplete: onClose })
+      .to(panel.current, { opacity: 0, y: 32, scale: 0.97, duration: 0.35, ease: "power2.in" }, 0)
+      .to(backdrop.current, { opacity: 0, duration: 0.35, ease: "power2.inOut" }, 0.05);
+  }, [onClose]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
@@ -115,8 +82,7 @@ function Expanded({ p, dark, accent, getFrom, onReveal, onClose }: { p: Product;
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-8" role="dialog" aria-modal="true" aria-label={`${p.brand} ${p.name}`}>
       <div ref={backdrop} onClick={close} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-      <div ref={panel} className="relative grid max-h-full w-full max-w-5xl overscroll-contain rounded-3xl md:grid-cols-2">
-        <div ref={shell} aria-hidden="true" className={`absolute inset-0 rounded-3xl ${bg}`} />
+      <div ref={panel} className={`relative grid max-h-full w-full max-w-5xl overflow-y-auto overscroll-contain rounded-3xl md:grid-cols-2 ${bg}`}>
         <button
           type="button"
           onClick={(e) => {
@@ -132,7 +98,7 @@ function Expanded({ p, dark, accent, getFrom, onReveal, onClose }: { p: Product;
           </svg>
         </button>
 
-        <div ref={imgCol} className="relative aspect-[4/3] md:aspect-auto md:min-h-[28rem]">
+        <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[28rem]">
           <div ref={imgBox} className="absolute inset-0 overflow-hidden rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none" style={{ background: dark ? "linear-gradient(160deg,#1a2749,#0b1328)" : `linear-gradient(160deg, #f7f5f1, ${p.tone.top})` }}>
             {p.photo ? (
               <>
@@ -204,15 +170,12 @@ export function ProductCard({ p, theme = "light", accent }: { p: Product; theme?
   const dark = theme === "dark";
   const muted = dark ? "text-white/70" : "text-black/65";
   const [isOpen, setIsOpen] = useState(false);
-  const card = useRef<HTMLElement>(null);
 
-  const getFrom = useCallback((): Rects => ({ card: card.current!.getBoundingClientRect(), img: card.current!.querySelector("[data-img]")!.getBoundingClientRect() }), []);
   const open = () => setIsOpen(true);
 
   return (
     <>
       <article
-        ref={card}
         role="button"
         tabIndex={0}
         aria-haspopup="dialog"
@@ -225,9 +188,8 @@ export function ProductCard({ p, theme = "light", accent }: { p: Product; theme?
           }
         }}
         className={`group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl transition duration-500 ${dark ? "bg-night-2 ring-1 ring-white/10 hover:bg-[#172440]" : "bg-white ring-1 ring-black/5 hover:shadow-2xl hover:shadow-black/10"}`}
-        style={isOpen ? { visibility: "hidden" } : undefined}
       >
-        <div data-img className="relative aspect-[4/3] shrink-0 overflow-hidden" style={{ background: dark ? "linear-gradient(160deg,#1a2749,#0b1328)" : `linear-gradient(160deg, #f7f5f1, ${p.tone.top})` }}>
+        <div className="relative aspect-[4/3] shrink-0 overflow-hidden" style={{ background: dark ? "linear-gradient(160deg,#1a2749,#0b1328)" : `linear-gradient(160deg, #f7f5f1, ${p.tone.top})` }}>
           {p.photo ? (
             <Img name={p.photo} alt="" aria-hidden="true" sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw" className="size-full object-cover transition duration-700 motion-reduce:transition-none group-hover:scale-105 motion-reduce:group-hover:scale-100" />
           ) : (
@@ -248,7 +210,7 @@ export function ProductCard({ p, theme = "light", accent }: { p: Product; theme?
           <Cta p={p} dark={dark} />
         </div>
       </article>
-      {isOpen && <Expanded p={p} dark={dark} accent={accent} getFrom={getFrom} onReveal={() => { card.current!.style.visibility = ""; }} onClose={() => setIsOpen(false)} />}
+      {isOpen && <Expanded p={p} dark={dark} accent={accent} onClose={() => setIsOpen(false)} />}
     </>
   );
 }
