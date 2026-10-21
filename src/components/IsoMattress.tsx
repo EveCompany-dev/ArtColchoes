@@ -30,16 +30,23 @@ type Props = {
   /** espaço extra no topo do viewBox para as camadas separadas */
   explodeRoom?: number;
   badges?: boolean;
+  activeLayer?: number | null;
+  centerHorizontally?: boolean;
   className?: string;
   title?: string;
   badgeColor?: string;
 };
 
-export default function IsoMattress({ layers, explodeRoom = 0, badges = false, className, title, badgeColor = "#0b1630" }: Props) {
+export default function IsoMattress({ layers, explodeRoom = 0, badges = false, activeLayer, centerHorizontally = false, className, title, badgeColor = "#0b1630" }: Props) {
   const uid = useId().replace(/:/g, "");
   const total = layers.reduce((s, l) => s + l.t, 0);
-  const minX = -D * C - 40;
-  const maxX = W * C + 10;
+  const baseMinX = -D * C - 40;
+  const baseMaxX = W * C + 10;
+  const horizontalOffset = centerHorizontally
+    ? ((W - D) * C) / 2 - (baseMinX + baseMaxX) / 2
+    : 0;
+  const minX = baseMinX + horizontalOffset;
+  const maxX = baseMaxX + horizontalOffset;
   const minY = -total - explodeRoom - 20;
   const maxY = (W + D) * S + 10;
 
@@ -78,7 +85,12 @@ export default function IsoMattress({ layers, explodeRoom = 0, badges = false, c
         const [bx, by] = p(W * 0.02, D, zm);
 
         return (
-          <g key={i} className="iso-layer" data-index={i}>
+          <g
+            key={i}
+            className="iso-layer"
+            data-index={i}
+            style={activeLayer == null ? undefined : { opacity: activeLayer === i ? 1 : 0.45, transition: "opacity 200ms ease" }}
+          >
             <polygon points={left} fill={l.left} stroke="#0b1630" strokeOpacity="0.1" strokeWidth="0.8" />
             <polygon points={right} fill={l.right} stroke="#0b1630" strokeOpacity="0.1" strokeWidth="0.8" />
             {tex && <polygon points={left} fill={tex} />}

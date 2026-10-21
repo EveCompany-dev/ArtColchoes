@@ -112,7 +112,7 @@ export default function Header({
         >
           <a
             href={homeHref}
-            className="hd-item relative z-10 inline-flex min-h-11 items-center"
+            className="hd-item hd-logo z-10 inline-flex min-h-11 items-center"
             aria-label="Art Colchões - início"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -147,7 +147,7 @@ export default function Header({
             })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-3">
             <span className="hd-item hidden sm:block">
               <a
                 href={whatsappLink()}

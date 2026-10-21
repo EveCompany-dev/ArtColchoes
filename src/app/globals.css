@@ -20,6 +20,20 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+.hd-logo {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+}
+
+@media (min-width: 1024px) {
+  .hd-logo {
+    position: relative;
+    left: auto;
+    translate: none;
+  }
+}
+
 * {
   scrollbar-width: none;
 }
